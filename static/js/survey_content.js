@@ -57,6 +57,7 @@ const SURVEY_TRANSLATIONS = {
     sec_eff: "효과 및 성과 부분",
     eff_q1_title: "6-1. Invest KOREA Summit 2026이 글로벌 현안과 당면과제를 시의적절하게 파악하는데 도움이 되었다고 생각하십니까?",
     eff_q2_title: "6-2. Invest KOREA Summit 2026을 통해서 확보한 정보, 네트워크 등이 향후에도 귀 사의 사업에 도움이 될 것이라고 생각하십니까?",
+    eff_q3_title: "6-3. (ESG) Invest KOREA Summit 2026은 ISO20121:2024(지속가능이벤트경영시스템) 인증을 취득했습니다. 행사 현장에서 ESG 실천 노력을 체감하셨습니까?",
 
     btn_submit: "설문 응답 제출하기",
     btn_submitting: "응답 저장 중...",
@@ -85,6 +86,13 @@ const SURVEY_TRANSLATIONS = {
       { val: 3, text: "보통" },
       { val: 2, text: "불만" },
       { val: 1, text: "매우 불만(비추천)" }
+    ],
+    scales_esg: [
+      { val: 5, text: "매우 그렇다" },
+      { val: 4, text: "그렇다" },
+      { val: 3, text: "보통이다" },
+      { val: 2, text: "아니다" },
+      { val: 1, text: "매우 아니다" }
     ],
 
     factors: [
@@ -175,6 +183,7 @@ const SURVEY_TRANSLATIONS = {
     sec_eff: "Outcomes & Impact",
     eff_q1_title: "6-1. Did Invest KOREA Summit 2026 enhance your understanding of global investment trends and key issues?",
     eff_q2_title: "6-2. Do you expect the information and business connections gained at Invest KOREA Summit 2026 to benefit your future business activities?",
+    eff_q3_title: "6-3. (ESG) Invest KOREA Summit 2026 has obtained ISO 20121:2024 certification (Event Sustainability Management System). To what extent did you notice the event's efforts to incorporate ESG practices throughout the event?",
 
     btn_submit: "Submit Survey",
     btn_submitting: "Submitting...",
@@ -203,6 +212,13 @@ const SURVEY_TRANSLATIONS = {
       { val: 3, text: "Neutral" },
       { val: 2, text: "Disagree" },
       { val: 1, text: "Strongly disagree" }
+    ],
+    scales_esg: [
+      { val: 5, text: "Very Much" },
+      { val: 4, text: "Somewhat" },
+      { val: 3, text: "Moderately" },
+      { val: 2, text: "Slightly" },
+      { val: 1, text: "Not at All" }
     ],
 
     factors: [

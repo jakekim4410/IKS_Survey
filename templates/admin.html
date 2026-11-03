@@ -214,6 +214,10 @@
           <div style="font-size: 12px; font-weight: 600; color: #1e40af;">향후 사업 기여도 (6-2)</div>
           <div style="font-size: 20px; font-weight: 800; color: #1e40af;" id="avgEff2">-</div>
         </div>
+        <div style="padding: 10px; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px;">
+          <div style="font-size: 12px; font-weight: 600; color: #1e40af;">ESG 실천 체감 (6-3)</div>
+          <div style="font-size: 20px; font-weight: 800; color: #1e40af;" id="avgEff3">-</div>
+        </div>
       </div>
     </div>
 
@@ -231,13 +235,12 @@
               <th>ID</th>
               <th>제출일시</th>
               <th>언어</th>
-              <th>기업명</th>
-              <th>국가</th>
+              <th>소재 국가</th>
               <th>총괄 만족도</th>
             </tr>
           </thead>
           <tbody id="recentTableBody">
-            <tr><td colspan="6" style="text-align: center; color: #94a3b8; padding: 24px;">응답 데이터를 불러오는 중...</td></tr>
+            <tr><td colspan="5" style="text-align: center; color: #94a3b8; padding: 24px;">응답 데이터를 불러오는 중...</td></tr>
           </tbody>
         </table>
       </div>
@@ -276,12 +279,13 @@
         document.getElementById('avgFin').textContent = avgs.fin ? avgs.fin + ' / 5.0' : '-';
         document.getElementById('avgEff1').textContent = avgs.eff_q1 ? avgs.eff_q1 + ' / 5.0' : '-';
         document.getElementById('avgEff2').textContent = avgs.eff_q2 ? avgs.eff_q2 + ' / 5.0' : '-';
+        document.getElementById('avgEff3').textContent = avgs.eff_q3 ? avgs.eff_q3 + ' / 5.0' : '-';
 
         // Table
         const tbody = document.getElementById('recentTableBody');
         tbody.innerHTML = '';
         if (!data.recent_responses || data.recent_responses.length === 0) {
-          tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #94a3b8; padding: 24px;">제출된 설문 응답이 없습니다.</td></tr>';
+          tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #94a3b8; padding: 24px;">제출된 설문 응답이 없습니다.</td></tr>';
           return;
         }
 
@@ -292,8 +296,7 @@
             <td>#${r.id}</td>
             <td>${r.submitted_at || '-'}</td>
             <td><span class="lang-badge ${isKo ? 'lang-ko' : 'lang-en'}">${isKo ? '국문 KR' : 'English EN'}</span></td>
-            <td><strong>${r.company_name}</strong></td>
-            <td>${r.country}</td>
+            <td><strong>${r.country}</strong></td>
             <td>${r.q1_overall ? r.q1_overall + '점' : '-'}</td>
           `;
           tbody.appendChild(tr);

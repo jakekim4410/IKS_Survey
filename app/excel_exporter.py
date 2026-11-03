@@ -57,12 +57,21 @@ def map_reg_topic(val, lang="ko"):
         return str(val)
 
 
+def to_numeric_score(val):
+    if val is None or pd.isna(val) or val == "":
+        return None
+    try:
+        return int(val)
+    except Exception:
+        return None
+
+
 def generate_survey_excel(rows) -> io.BytesIO:
     """
     DB 응답 레코드 목록을 받아 전문적인 서식이 적용된 다중 시트 엑셀(.xlsx) 바이트 스트림 생성
-    - 시트 1: 설문 응답 상세 (국문/영문 텍스트 라벨 매핑)
+    - 시트 1: 설문 응답 상세 (수식/통계 계산이 가능하도록 만족도 척도는 순수 수치 1~5 표기)
     - 시트 2: 통계 요약 (평균 점수, 응답자 분포 등)
-    - 시트 3: 원천 데이터 (수치형 코드값 - SPSS, R, 통계분석용)
+    - 시트 3: 원천 데이터 (SPSS, R, 통계분석용)
     """
     raw_list = [dict(r) for r in rows]
     df_raw = pd.DataFrame(raw_list)
@@ -72,7 +81,7 @@ def generate_survey_excel(rows) -> io.BytesIO:
         df_code = df_display.copy()
         df_stats = pd.DataFrame([{"항목": "응답 데이터 없음", "값": 0}])
     else:
-        # 1. 텍스트 라벨이 적용된 Display용 DataFrame 구성
+        # 1. Display용 DataFrame 구성 (만족도 및 평가 척도는 순수 숫자 1~5로 기록하여 Excel 수식 계산 가능)
         display_records = []
         for r in raw_list:
             lang = r.get("lang") or "en"
@@ -88,11 +97,11 @@ def generate_survey_excel(rows) -> io.BytesIO:
                 "언어": "English(EN)" if lang == "en" else "국문(KR)",
                 "소재국가": r.get("country"),
                 
-                # 총괄 (문1)
-                "Invest KOREA 2026 총괄 만족도": f"{r.get('q1_overall')}점 ({map_scale(r.get('q1_overall'), 'satisfaction', lang)})" if r.get('q1_overall') else "",
+                # 총괄 (문1) - 숫자만 표기
+                "Invest KOREA 2026 총괄 만족도": to_numeric_score(r.get('q1_overall')),
                 
                 # 세션 1: IKS 컨퍼런스 (문2-1, 2-2, 2-3, 2-4)
-                "IKS 컨퍼런스 만족도": f"{r.get('conf_q1')}점 ({map_scale(r.get('conf_q1'), 'satisfaction', lang)})" if r.get('conf_q1') else "",
+                "IKS 컨퍼런스 만족도": to_numeric_score(r.get('conf_q1')),
                 "IKS 컨퍼런스 만족요인": map_factors(conf_factors, lang),
                 "IKS 컨퍼런스 희망주제(1순위)": map_conf_topic(r.get("conf_q3_rank1"), lang),
                 "IKS 컨퍼런스 희망주제(2순위)": map_conf_topic(r.get("conf_q3_rank2"), lang),
@@ -101,35 +110,36 @@ def generate_survey_excel(rows) -> io.BytesIO:
                 "외투기업 애로사항": r.get("conf_q4") or "",
                 
                 # 세션 2: 지자체 IR
-                "지자체IR 만족도": f"{r.get('reg_q1')}점 ({map_scale(r.get('reg_q1'), 'satisfaction', lang)})" if r.get('reg_q1') else "",
-                "지자체IR 투자이해 도움": f"{r.get('reg_q2')}점 ({map_scale(r.get('reg_q2'), 'agreement', lang)})" if r.get('reg_q2') else "",
+                "지자체IR 만족도": to_numeric_score(r.get('reg_q1')),
+                "지자체IR 투자이해 도움": to_numeric_score(r.get('reg_q2')),
                 "지자체IR 개선사항(1순위)": map_reg_topic(r.get("reg_q3_rank1"), lang),
                 "지자체IR 개선사항(2순위)": map_reg_topic(r.get("reg_q3_rank2"), lang),
                 "지자체IR 개선사항(기타)": r.get("reg_q3_other") or "",
                 
                 # 세션 3: 외투 환경 세미나
-                "외투세미나 만족도": f"{r.get('semi_q1')}점 ({map_scale(r.get('semi_q1'), 'satisfaction', lang)})" if r.get('semi_q1') else "",
+                "외투세미나 만족도": to_numeric_score(r.get('semi_q1')),
                 "외투세미나 만족요인": map_factors(semi_factors, lang),
                 "외투세미나 개선/제안": r.get("semi_q3") or "",
                 
                 # 세션 4: M.AX 에너지 전략 포럼
-                "M.AX포럼 만족도": f"{r.get('max_q1')}점 ({map_scale(r.get('max_q1'), 'satisfaction', lang)})" if r.get('max_q1') else "",
+                "M.AX포럼 만족도": to_numeric_score(r.get('max_q1')),
                 "M.AX포럼 만족요인": map_factors(max_factors, lang),
                 "M.AX포럼 개선/제안": r.get("max_q3") or "",
                 
                 # 세션 5: 글로벌 VC 스타트업 포럼
-                "글로벌VC포럼 만족도": f"{r.get('vc_q1')}점 ({map_scale(r.get('vc_q1'), 'satisfaction', lang)})" if r.get('vc_q1') else "",
+                "글로벌VC포럼 만족도": to_numeric_score(r.get('vc_q1')),
                 "글로벌VC포럼 만족요인": map_factors(vc_factors, lang),
                 "글로벌VC포럼 개선/제안": r.get("vc_q3") or "",
 
                 # [신규] 세션 6: 재무적 투자포럼
-                "재무적투자포럼 만족도": f"{r.get('fin_q1')}점 ({map_scale(r.get('fin_q1'), 'satisfaction', lang)})" if r.get('fin_q1') else "",
+                "재무적투자포럼 만족도": to_numeric_score(r.get('fin_q1')),
                 "재무적투자포럼 만족요인": map_factors(fin_factors, lang),
                 "재무적투자포럼 개선/제안": r.get("fin_q3") or "",
 
-                # 효과 및 성과
-                "글로벌현안 파악기여도(6-1)": f"{r.get('eff_q1')}점 ({map_scale(r.get('eff_q1'), 'recommendation', lang)})" if r.get('eff_q1') else "",
-                "향후사업 네트워크기여도(6-2)": f"{r.get('eff_q2')}점 ({map_scale(r.get('eff_q2'), 'recommendation', lang)})" if r.get('eff_q2') else "",
+                # 효과 및 성과 (6-1, 6-2, 6-3)
+                "글로벌현안 파악기여도(6-1)": to_numeric_score(r.get('eff_q1')),
+                "향후사업 네트워크기여도(6-2)": to_numeric_score(r.get('eff_q2')),
+                "ESG 실천노력 체감도(6-3)": to_numeric_score(r.get('eff_q3')),
             }
             display_records.append(rec)
         df_display = pd.DataFrame(display_records)
@@ -149,7 +159,8 @@ def generate_survey_excel(rows) -> io.BytesIO:
             "글로벌 VC 스타트업 포럼 만족도 (세션5)": "vc_q1",
             "재무적 투자포럼 만족도 (세션6)": "fin_q1",
             "글로벌 현안 파악 기여도 (6-1)": "eff_q1",
-            "향후 사업 및 네트워크 기여도 (6-2)": "eff_q2"
+            "향후 사업 및 네트워크 기여도 (6-2)": "eff_q2",
+            "ESG 실천 노력 체감도 (6-3)": "eff_q3"
         }
 
         stats_rows = [

@@ -49,6 +49,7 @@ class SurveySubmission(BaseModel):
     # 7. 효과 및 성과 부분
     eff_q1: Optional[int] = Field(None, ge=1, le=5)  # 6-1 글로벌 현안 파악 기여도
     eff_q2: Optional[int] = Field(None, ge=1, le=5)  # 6-2 향후 비즈니스 및 네트워크 기여도
+    eff_q3: Optional[int] = Field(None, ge=1, le=5)  # 6-3 ESG 실천 노력 체감도
 
     @field_validator("country")
     @classmethod

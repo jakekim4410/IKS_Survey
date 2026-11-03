@@ -51,7 +51,7 @@ def submit_survey(submission: SurveySubmission, request: Request):
         max_q1, max_q2, max_q3,
         vc_q1, vc_q2, vc_q3,
         fin_q1, fin_q2, fin_q3,
-        eff_q1, eff_q2,
+        eff_q1, eff_q2, eff_q3,
         ip_address, user_agent
     ) VALUES (
         ?, ?, ?,
@@ -62,7 +62,7 @@ def submit_survey(submission: SurveySubmission, request: Request):
         ?, ?, ?,
         ?, ?, ?,
         ?, ?, ?,
-        ?, ?,
+        ?, ?, ?,
         ?, ?
     )
     """
@@ -76,7 +76,7 @@ def submit_survey(submission: SurveySubmission, request: Request):
         submission.max_q1, max_q2_json, submission.max_q3,
         submission.vc_q1, vc_q2_json, submission.vc_q3,
         submission.fin_q1, fin_q2_json, submission.fin_q3,
-        submission.eff_q1, submission.eff_q2,
+        submission.eff_q1, submission.eff_q2, submission.eff_q3,
         ip_addr, user_agent
     )
 
@@ -149,7 +149,8 @@ def get_admin_stats(auth: bool = Depends(verify_admin_key)):
                 AVG(vc_q1) as avg_vc,
                 AVG(fin_q1) as avg_fin,
                 AVG(eff_q1) as avg_eff_q1,
-                AVG(eff_q2) as avg_eff_q2
+                AVG(eff_q2) as avg_eff_q2,
+                AVG(eff_q3) as avg_eff_q3
             FROM survey_responses
         """)
         row = cur.fetchone()
@@ -164,6 +165,7 @@ def get_admin_stats(auth: bool = Depends(verify_admin_key)):
             "fin": round(row["avg_fin"], 2) if row["avg_fin"] else None,
             "eff_q1": round(row["avg_eff_q1"], 2) if row["avg_eff_q1"] else None,
             "eff_q2": round(row["avg_eff_q2"], 2) if row["avg_eff_q2"] else None,
+            "eff_q3": round(row["avg_eff_q3"], 2) if row["avg_eff_q3"] else None,
         }
 
         cur = conn.execute("""

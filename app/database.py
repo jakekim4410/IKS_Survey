@@ -56,6 +56,7 @@ CREATE TABLE IF NOT EXISTS survey_responses (
     -- 효과 및 성과 부분
     eff_q1 INTEGER,           -- 6-1 글로벌 현안 및 당면과제 파악 기여도
     eff_q2 INTEGER,           -- 6-2 향후 비즈니스 및 네트워크 기여도
+    eff_q3 INTEGER,           -- 6-3 ESG 실천 노력 체감도
     
     -- 메타데이터
     ip_address TEXT,
@@ -99,6 +100,7 @@ SAMPLE_DATA = [
         "fin_q3": "Excellent overview of institutional investor allocations into Korean infrastructure.",
         "eff_q1": 5,
         "eff_q2": 5,
+        "eff_q3": 5,
         "ip_address": "127.0.0.1",
         "user_agent": "SampleSeed/2.0"
     },
@@ -133,6 +135,7 @@ SAMPLE_DATA = [
         "fin_q3": "사모펀드 및 연기금 대체투자 세션의 네트워킹 시간이 매우 유익했습니다.",
         "eff_q1": 5,
         "eff_q2": 5,
+        "eff_q3": 4,
         "ip_address": "127.0.0.1",
         "user_agent": "SampleSeed/2.0"
     }
@@ -168,7 +171,7 @@ def seed_samples_if_empty(conn):
             max_q1, max_q2, max_q3,
             vc_q1, vc_q2, vc_q3,
             fin_q1, fin_q2, fin_q3,
-            eff_q1, eff_q2,
+            eff_q1, eff_q2, eff_q3,
             ip_address, user_agent
         ) VALUES (
             ?, ?, ?,
@@ -179,7 +182,7 @@ def seed_samples_if_empty(conn):
             ?, ?, ?,
             ?, ?, ?,
             ?, ?, ?,
-            ?, ?,
+            ?, ?, ?,
             ?, ?
         )
         """
@@ -193,12 +196,12 @@ def seed_samples_if_empty(conn):
                 s["max_q1"], json.dumps(s["max_q2"], ensure_ascii=False), s["max_q3"],
                 s["vc_q1"], json.dumps(s["vc_q2"], ensure_ascii=False), s["vc_q3"],
                 s["fin_q1"], json.dumps(s["fin_q2"], ensure_ascii=False), s["fin_q3"],
-                s["eff_q1"], s["eff_q2"],
+                s["eff_q1"], s["eff_q2"], s["eff_q3"],
                 s["ip_address"], s["user_agent"]
             )
             conn.execute(query, params)
         conn.commit()
-        logger.info("Successfully seeded 2 sample survey responses with Session 6 into DB.")
+        logger.info("Successfully seeded 2 sample survey responses with Session 6 and 6-3 into DB.")
 
 
 def init_db():
@@ -227,6 +230,13 @@ def init_db():
         if "eff_q2" not in columns:
             conn.execute("ALTER TABLE survey_responses ADD COLUMN eff_q2 INTEGER;")
             logger.info("Migrated column 'eff_q2' into survey_responses.")
+        if "eff_q3" not in columns:
+            conn.execute("ALTER TABLE survey_responses ADD COLUMN eff_q3 INTEGER;")
+            logger.info("Migrated column 'eff_q3' into survey_responses.")
+
+        # 샘플 및 기존 데이터 6-3 답변 업데이트 (영문: 5, 국문: 4)
+        conn.execute("UPDATE survey_responses SET eff_q3 = 5 WHERE (eff_q3 IS NULL OR eff_q3 = 0) AND lang = 'en';")
+        conn.execute("UPDATE survey_responses SET eff_q3 = 4 WHERE (eff_q3 IS NULL OR eff_q3 = 0) AND lang = 'ko';")
             
         conn.commit()
         seed_samples_if_empty(conn)

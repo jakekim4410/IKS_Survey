@@ -116,6 +116,18 @@ function updateScales(lang) {
       }
     });
   });
+
+  // ESG 체감도 척도 (6-3)
+  document.querySelectorAll('.scale-esg').forEach(container => {
+    container.querySelectorAll('.scale-option').forEach(opt => {
+      const val = parseInt(opt.getAttribute('data-value'), 10);
+      const item = t.scales_esg.find(s => s.val === val);
+      if (item) {
+        const textEl = opt.querySelector('.scale-text');
+        if (textEl) textEl.textContent = item.text;
+      }
+    });
+  });
 }
 
 function updateFactors(lang) {
@@ -330,7 +342,8 @@ async function handleFormSubmit(e) {
 
     // 7. 효과 및 성과
     eff_q1: getRadioValue('eff_q1'),
-    eff_q2: getRadioValue('eff_q2')
+    eff_q2: getRadioValue('eff_q2'),
+    eff_q3: getRadioValue('eff_q3')
   };
 
   const btnSubmit = document.getElementById('btnSubmit');
