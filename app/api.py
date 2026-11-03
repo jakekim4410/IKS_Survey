@@ -183,3 +183,17 @@ def get_admin_stats(auth: bool = Depends(verify_admin_key)):
         "averages": averages,
         "recent_responses": recent_rows
     }
+
+
+@router.post("/admin/reset")
+def reset_survey_data(auth: bool = Depends(verify_admin_key)):
+    """관리자 전용: 설문 응답 데이터 전체 초기화 (0건으로 리셋)"""
+    with get_db() as conn:
+        conn.execute("DELETE FROM survey_responses;")
+        try:
+            conn.execute("DELETE FROM sqlite_sequence WHERE name = 'survey_responses';")
+        except Exception:
+            pass
+        conn.commit()
+    return {"success": True, "message": "모든 설문 응답 데이터가 성공적으로 초기화되었습니다."}
+
