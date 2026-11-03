@@ -100,6 +100,114 @@ body {
   font-weight: 700;
 }
 
+/* Prominent Language Selector Banner */
+.lang-selector-banner {
+  background: #ffffff;
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  margin-bottom: 16px;
+  border: 1.5px solid var(--border-color);
+  box-shadow: var(--shadow);
+}
+
+.lang-selector-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.lang-selector-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.lang-selector-note {
+  font-size: 11.5px;
+  color: var(--text-muted);
+}
+
+.lang-selector-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.lang-choice-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: #f8fafc;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+  user-select: none;
+}
+
+.lang-choice-btn:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+.lang-choice-btn.active {
+  background: #eff6ff;
+  border-color: var(--accent);
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.15);
+}
+
+.lang-flag {
+  font-size: 24px;
+  line-height: 1;
+}
+
+.lang-choice-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.lang-choice-name {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--text-dark);
+}
+
+.lang-choice-btn.active .lang-choice-name {
+  color: var(--accent);
+}
+
+.lang-choice-desc {
+  font-size: 11.5px;
+  color: var(--text-muted);
+}
+
+.lang-choice-check {
+  font-size: 13px;
+  font-weight: 800;
+  color: transparent;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1.5px solid #cbd5e1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.lang-choice-btn.active .lang-choice-check {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #ffffff;
+}
+
 /* Container */
 .container {
   max-width: 680px;

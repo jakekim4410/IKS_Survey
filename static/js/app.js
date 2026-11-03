@@ -1,5 +1,6 @@
 // Invest KOREA Summit 2026 Survey Frontend Logic
-let currentLang = 'ko';
+// 외국인 참가자가 다수이므로 영문(en) 기본 설정
+let currentLang = 'en';
 
 // 순위 선택 상태 저장 (배열 순서가 곧 1순위, 2순위, 3순위)
 let confQ3Ranks = []; // max 3
@@ -11,13 +12,22 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function initLanguage() {
+  // 상단 헤더 토글 버튼
   const btnKo = document.getElementById('btnLangKo');
   const btnEn = document.getElementById('btnLangEn');
 
-  btnKo.addEventListener('click', () => switchLanguage('ko'));
-  btnEn.addEventListener('click', () => switchLanguage('en'));
+  if (btnKo) btnKo.addEventListener('click', () => switchLanguage('ko'));
+  if (btnEn) btnEn.addEventListener('click', () => switchLanguage('en'));
 
-  // 초기 렌더링
+  // 상단 대형 언어 선택 배너 카드 버튼
+  document.querySelectorAll('.lang-choice-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const selected = btn.getAttribute('data-lang');
+      if (selected) switchLanguage(selected);
+    });
+  });
+
+  // 초기 렌더링 (영어 기본)
   applyLanguage(currentLang);
 }
 
@@ -25,8 +35,16 @@ function switchLanguage(lang) {
   if (currentLang === lang) return;
   currentLang = lang;
 
-  document.getElementById('btnLangKo').classList.toggle('active', lang === 'ko');
-  document.getElementById('btnLangEn').classList.toggle('active', lang === 'en');
+  // 헤더 버튼 상태 동기화
+  const btnKo = document.getElementById('btnLangKo');
+  const btnEn = document.getElementById('btnLangEn');
+  if (btnKo) btnKo.classList.toggle('active', lang === 'ko');
+  if (btnEn) btnEn.classList.toggle('active', lang === 'en');
+
+  // 대형 배너 카드 버튼 상태 동기화
+  document.querySelectorAll('.lang-choice-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+  });
 
   applyLanguage(lang);
 }

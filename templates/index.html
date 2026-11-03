@@ -12,22 +12,48 @@
   <header class="app-header">
     <div class="brand-wrapper">
       <span class="brand-badge">IKS 2026</span>
-      <span class="brand-title" data-i18n="badge_survey">참가자 만족도 설문</span>
+      <span class="brand-title" data-i18n="badge_survey">Participant Survey</span>
     </div>
     <div class="lang-switch-group">
-      <button type="button" id="btnLangKo" class="lang-btn active">한국어</button>
-      <button type="button" id="btnLangEn" class="lang-btn">English</button>
+      <button type="button" id="btnLangEn" class="lang-btn active">English</button>
+      <button type="button" id="btnLangKo" class="lang-btn">한국어</button>
     </div>
   </header>
 
   <main class="container">
+    <!-- Prominent Language Selector Banner (Large, High Contrast, Intuitive) -->
+    <section class="lang-selector-banner">
+      <div class="lang-selector-header">
+        <span class="lang-selector-title">🌐 Select Language / 언어 선택</span>
+        <span class="lang-selector-note">Tap to switch</span>
+      </div>
+      <div class="lang-selector-grid">
+        <button type="button" class="lang-choice-btn active" data-lang="en">
+          <span class="lang-flag">🌐</span>
+          <div class="lang-choice-info">
+            <span class="lang-choice-name">English</span>
+            <span class="lang-choice-desc">Default Language</span>
+          </div>
+          <span class="lang-choice-check">✓</span>
+        </button>
+        <button type="button" class="lang-choice-btn" data-lang="ko">
+          <span class="lang-flag">🇰🇷</span>
+          <div class="lang-choice-info">
+            <span class="lang-choice-name">한국어</span>
+            <span class="lang-choice-desc">국문 설문조사</span>
+          </div>
+          <span class="lang-choice-check">✓</span>
+        </button>
+      </div>
+    </section>
+
     <!-- Intro Card -->
     <section class="intro-card">
       <span class="intro-badge" data-i18n="badge_event">IKS 2026</span>
-      <h1 class="intro-title" data-i18n="title">2026 Invest KOREA Summit 참가자 설문 조사</h1>
+      <h1 class="intro-title" data-i18n="title">2026 Invest KOREA Summit Participant Survey</h1>
       <p class="intro-desc" data-i18n="intro_desc">
-        Invest KOREA에서는 IKS 2026 참가자를 대상으로 설문조사를 실시하고 있습니다.
-        설문 결과는 사업 성과분석, 향후 개선 및 발전을 위해 활용되며, 응답 내용 및 개인정보는 법에 따라 철저히 보호되고 통계 목적으로만 사용될 예정입니다. 설문조사에 협조해주셔서 대단히 감사드립니다.
+        Invest KOREA is conducting a survey of participants in IKS 2026.
+        The results will be used for performance analysis and for improving and developing future events. Your responses and personal information will be strictly protected in accordance with applicable laws and used for statistical purposes only. Thank you very much for your cooperation.
       </p>
     </section>
 
@@ -361,8 +387,8 @@
 
   </main>
 
-  <script src="/static/js/survey_content.js"></script>
-  <script src="/static/js/app.js"></script>
+  <script src="/static/js/survey_content.js?v=5"></script>
+  <script src="/static/js/app.js?v=5"></script>
 </body>
 </html>
 
