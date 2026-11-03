@@ -6,17 +6,17 @@ const SURVEY_TRANSLATIONS = {
     intro_desc: "Invest KOREA에서는 IKS 2026 참가자를 대상으로 설문조사를 실시하고 있습니다.\n설문 결과는 사업 성과분석, 향후 개선 및 발전을 위해 활용되며, 응답 내용 및 개인정보는 법에 따라 철저히 보호되고 통계 목적으로만 사용될 예정입니다. 협조해주셔서 대단히 감사드립니다.",
     
     sec_info: "기본 정보",
-    label_company: "기업명",
-    ph_company: "기업명을 입력해주세요",
     label_country: "소재 국가",
     ph_country: "국가명을 입력해주세요 (예: 대한민국, 미국, 일본 등)",
     
     sec_overall: "총괄 만족도",
-    q1_overall_title: "문1. Invest KOREA Summit(IKS)의 전반적인 만족도는 어떻습니까?",
+    // 1. 요청 반영: 문1 문항제목 변경
+    q1_overall_title: "문1. Invest KOREA 2026의 전반적인 만족도",
     
-    sec_conf: "Invest KOREA 컨퍼런스",
-    conf_q1_title: "문2-1. 개막식 및 컨퍼런스의 전반적인 만족도는 어떻습니까?",
-    conf_q2_title: "문2-2. 개막식 및 컨퍼런스에서 가장 만족스러웠던 점은 무엇입니까?",
+    sec_conf: "IKS 컨퍼런스",
+    // 2. 요청 반영: 문2-1, 문2-2 문항제목 변경
+    conf_q1_title: "문2-1. IKS 컨퍼런스의 전반적인 만족도는 어떻습니까?",
+    conf_q2_title: "문2-2. IKS 컨퍼런스에서 가장 만족스러웠던 점은 무엇입니까?",
     sub_multi: "(복수 선택 가능)",
     conf_q3_title: "문2-3. 향후 컨퍼런스에서 반드시 다루어졌으면 하는 내용은 무엇입니까?",
     sub_rank3: "(중요한 순으로 최대 3개까지 터치하여 순위 선택)",
@@ -47,7 +47,13 @@ const SURVEY_TRANSLATIONS = {
     vc_q2_title: "문2. 글로벌 VC 스타트업 포럼에서 가장 만족스러웠던 점은 무엇입니까?",
     vc_q3_title: "문3. 글로벌 VC 스타트업 포럼 중 개선 또는 제안하고 싶은 사항은 무엇입니까?",
 
-    // [신규] 효과 및 성과 부분
+    // 4. 요청 반영: 세션 6 재무적 투자포럼
+    sec_fin: "재무적 투자포럼",
+    fin_q1_title: "문1. 재무적 투자포럼의 전반적인 만족도는 어떻습니까?",
+    fin_q2_title: "문2. 재무적 투자포럼에서 가장 만족스러웠던 점은 무엇입니까?",
+    fin_q3_title: "문3. 재무적 투자포럼 중 개선 또는 제안하고 싶은 사항은 무엇입니까?",
+
+    // 효과 및 성과 부분
     sec_eff: "효과 및 성과 부분",
     eff_q1_title: "6-1. Invest KOREA Summit 2026이 글로벌 현안과 당면과제를 시의적절하게 파악하는데 도움이 되었다고 생각하십니까?",
     eff_q2_title: "6-2. Invest KOREA Summit 2026을 통해서 확보한 정보, 네트워크 등이 향후에도 귀 사의 사업에 도움이 될 것이라고 생각하십니까?",
@@ -108,7 +114,7 @@ const SURVEY_TRANSLATIONS = {
     rank_label_1: "1순위",
     rank_label_2: "2순위",
     rank_label_3: "3순위",
-    validation_req: "기업명과 소재 국가는 필수 입력 항목입니다."
+    validation_req: "소재 국가는 필수 입력 항목입니다."
   },
 
   en: {
@@ -118,17 +124,17 @@ const SURVEY_TRANSLATIONS = {
     intro_desc: "Invest KOREA is conducting a survey of participants in IKS 2026.\nThe results will be used for performance analysis and for improving and developing future events. Your responses and personal information will be strictly protected in accordance with applicable laws and used for statistical purposes only. Thank you very much for your cooperation.",
     
     sec_info: "Participant Information",
-    label_company: "Company Name",
-    ph_company: "Enter your company name",
     label_country: "Country",
     ph_country: "Enter country (e.g., USA, Japan, Germany, etc.)",
 
     sec_overall: "Overall Satisfaction",
-    q1_overall_title: "Q1. How satisfied are you with the Invest KOREA Summit (IKS) overall?",
+    // 1. Updated: Q1 title
+    q1_overall_title: "Q1. Overall satisfaction with Invest KOREA 2026",
 
-    sec_conf: "Invest KOREA Conference",
-    conf_q1_title: "Q2-1. How satisfied are you with the Opening Ceremony and Conference overall?",
-    conf_q2_title: "Q2-2. What did you find most satisfying about the Opening Ceremony and Conference?",
+    sec_conf: "IKS Conference",
+    // 2. Updated: Q2-1, Q2-2 titles
+    conf_q1_title: "Q2-1. How satisfied are you with the IKS Conference overall?",
+    conf_q2_title: "Q2-2. What did you find most satisfying about the IKS Conference?",
     sub_multi: "(Multiple answers allowed)",
     conf_q3_title: "Q2-3. What topics would you like to see covered at future conferences?",
     sub_rank3: "(Select up to 3 by tapping in order of importance)",
@@ -159,7 +165,13 @@ const SURVEY_TRANSLATIONS = {
     vc_q2_title: "Q2. What did you find most satisfying about the Global VC Startup Forum?",
     vc_q3_title: "Q3. What improvements or suggestions do you have for the Global VC Startup Forum?",
 
-    // [New] Outcomes & Impact
+    // 4. Added: Session 6 Financial Investment Forum
+    sec_fin: "Financial Investment Forum",
+    fin_q1_title: "Q1. How satisfied are you with the Financial Investment Forum overall?",
+    fin_q2_title: "Q2. What did you find most satisfying about the Financial Investment Forum?",
+    fin_q3_title: "Q3. What improvements or suggestions do you have for the Financial Investment Forum?",
+
+    // Outcomes & Impact
     sec_eff: "Outcomes & Impact",
     eff_q1_title: "6-1. Did Invest KOREA Summit 2026 enhance your understanding of global investment trends and key issues?",
     eff_q2_title: "6-2. Do you expect the information and business connections gained at Invest KOREA Summit 2026 to benefit your future business activities?",
@@ -220,6 +232,6 @@ const SURVEY_TRANSLATIONS = {
     rank_label_1: "1st",
     rank_label_2: "2nd",
     rank_label_3: "3rd",
-    validation_req: "Company name and Country are required."
+    validation_req: "Country is a required field."
   }
 };

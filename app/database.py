@@ -11,44 +11,49 @@ CREATE TABLE IF NOT EXISTS survey_responses (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     lang TEXT NOT NULL DEFAULT 'en',
-    company_name TEXT NOT NULL,
+    company_name TEXT DEFAULT '',
     country TEXT NOT NULL,
     
     -- 총괄 만족도
     q1_overall INTEGER,
     
-    -- 컨퍼런스 세션
+    -- 세션 1: IKS 컨퍼런스
     conf_q1 INTEGER,
-    conf_q2 TEXT,             -- JSON array of selected choice numbers e.g. ["1", "3"]
+    conf_q2 TEXT,             -- JSON array
     conf_q3_rank1 INTEGER,    -- 1순위
     conf_q3_rank2 INTEGER,    -- 2순위
     conf_q3_rank3 INTEGER,    -- 3순위
     conf_q3_other TEXT,
-    conf_q4 TEXT,             -- 외투기업 애로사항
+    conf_q4 TEXT,             -- 애로사항
     
-    -- 지자체 IR 세션
+    -- 세션 2: 지자체 IR 세션
     reg_q1 INTEGER,
     reg_q2 INTEGER,
     reg_q3_rank1 INTEGER,     -- 1순위
     reg_q3_rank2 INTEGER,     -- 2순위
     reg_q3_other TEXT,
     
-    -- 외투 환경 세미나
+    -- 세션 3: 외투 환경 세미나
     semi_q1 INTEGER,
     semi_q2 TEXT,             -- JSON array
     semi_q3 TEXT,
     
-    -- M.AX 에너지 전략 포럼
+    -- 세션 4: M.AX 에너지 전략 포럼
     max_q1 INTEGER,
     max_q2 TEXT,              -- JSON array
     max_q3 TEXT,
     
-    -- 글로벌 VC 스타트업 포럼
+    -- 세션 5: 글로벌 VC 스타트업 포럼
     vc_q1 INTEGER,
     vc_q2 TEXT,               -- JSON array
     vc_q3 TEXT,
+
+    -- [신규] 세션 6: 재무적 투자포럼
+    fin_q1 INTEGER,           -- 만족도
+    fin_q2 TEXT,              -- JSON array 만족요인
+    fin_q3 TEXT,              -- 개선/제안
     
-    -- [신규] 효과 및 성과 부분
+    -- 효과 및 성과 부분
     eff_q1 INTEGER,           -- 6-1 글로벌 현안 및 당면과제 파악 기여도
     eff_q2 INTEGER,           -- 6-2 향후 비즈니스 및 네트워크 기여도
     
@@ -59,16 +64,16 @@ CREATE TABLE IF NOT EXISTS survey_responses (
 
 CREATE INDEX IF NOT EXISTS idx_survey_submitted ON survey_responses(submitted_at);
 CREATE INDEX IF NOT EXISTS idx_survey_lang ON survey_responses(lang);
-CREATE INDEX IF NOT EXISTS idx_survey_company ON survey_responses(company_name);
+CREATE INDEX IF NOT EXISTS idx_survey_country ON survey_responses(country);
 """
 
 SAMPLE_DATA = [
     {
         "lang": "en",
-        "company_name": "Vanguard CleanTech Capital Ltd.",
+        "company_name": "",
         "country": "United Kingdom",
         "q1_overall": 5,
-        "conf_q1": 4,
+        "conf_q1": 5,
         "conf_q2": ["1", "4"],
         "conf_q3_rank1": 2,
         "conf_q3_rank2": 5,
@@ -89,14 +94,17 @@ SAMPLE_DATA = [
         "vc_q1": 5,
         "vc_q2": ["1", "4"],
         "vc_q3": "Recommend scheduling dedicated follow-up 1:1 deal meetings for global VCs.",
+        "fin_q1": 5,
+        "fin_q2": ["1", "4"],
+        "fin_q3": "Excellent overview of institutional investor allocations into Korean infrastructure.",
         "eff_q1": 5,
         "eff_q2": 5,
         "ip_address": "127.0.0.1",
-        "user_agent": "SampleSeed/1.0"
+        "user_agent": "SampleSeed/2.0"
     },
     {
         "lang": "ko",
-        "company_name": "(주)솔루션테크 코리아",
+        "company_name": "",
         "country": "대한민국",
         "q1_overall": 5,
         "conf_q1": 5,
@@ -120,10 +128,13 @@ SAMPLE_DATA = [
         "vc_q1": 5,
         "vc_q2": ["1", "3"],
         "vc_q3": "딥테크 스타트업 쇼케이스 시간과 IR 발표 부스를 더 확대해주시면 좋겠습니다.",
+        "fin_q1": 5,
+        "fin_q2": ["2", "4"],
+        "fin_q3": "사모펀드 및 연기금 대체투자 세션의 네트워킹 시간이 매우 유익했습니다.",
         "eff_q1": 5,
         "eff_q2": 5,
         "ip_address": "127.0.0.1",
-        "user_agent": "SampleSeed/1.0"
+        "user_agent": "SampleSeed/2.0"
     }
 ]
 
@@ -156,6 +167,7 @@ def seed_samples_if_empty(conn):
             semi_q1, semi_q2, semi_q3,
             max_q1, max_q2, max_q3,
             vc_q1, vc_q2, vc_q3,
+            fin_q1, fin_q2, fin_q3,
             eff_q1, eff_q2,
             ip_address, user_agent
         ) VALUES (
@@ -163,6 +175,7 @@ def seed_samples_if_empty(conn):
             ?,
             ?, ?, ?, ?, ?, ?, ?,
             ?, ?, ?, ?, ?,
+            ?, ?, ?,
             ?, ?, ?,
             ?, ?, ?,
             ?, ?, ?,
@@ -179,34 +192,43 @@ def seed_samples_if_empty(conn):
                 s["semi_q1"], json.dumps(s["semi_q2"], ensure_ascii=False), s["semi_q3"],
                 s["max_q1"], json.dumps(s["max_q2"], ensure_ascii=False), s["max_q3"],
                 s["vc_q1"], json.dumps(s["vc_q2"], ensure_ascii=False), s["vc_q3"],
+                s["fin_q1"], json.dumps(s["fin_q2"], ensure_ascii=False), s["fin_q3"],
                 s["eff_q1"], s["eff_q2"],
                 s["ip_address"], s["user_agent"]
             )
             conn.execute(query, params)
         conn.commit()
-        logger.info("Successfully seeded 2 realistic sample survey responses into DB.")
+        logger.info("Successfully seeded 2 sample survey responses with Session 6 into DB.")
 
 
 def init_db():
-    """앱 시작 시 테이블 초기화 및 신규 컬럼 마이그레이션 & 샘플 시딩"""
+    """앱 시작 시 테이블 초기화 및 컬럼 마이그레이션 & 샘플 시딩"""
     with get_db() as conn:
         conn.executescript(CREATE_TABLE_SQL)
         
-        # 기존 DB 테이블 컬럼 마이그레이션 (eff_q1, eff_q2)
         cursor = conn.execute("PRAGMA table_info(survey_responses)")
         columns = [row["name"] for row in cursor.fetchall()]
         
+        # 세션 6 (재무적 투자포럼) 컬럼 마이그레이션
+        if "fin_q1" not in columns:
+            conn.execute("ALTER TABLE survey_responses ADD COLUMN fin_q1 INTEGER;")
+            logger.info("Migrated column 'fin_q1' into survey_responses.")
+        if "fin_q2" not in columns:
+            conn.execute("ALTER TABLE survey_responses ADD COLUMN fin_q2 TEXT;")
+            logger.info("Migrated column 'fin_q2' into survey_responses.")
+        if "fin_q3" not in columns:
+            conn.execute("ALTER TABLE survey_responses ADD COLUMN fin_q3 TEXT;")
+            logger.info("Migrated column 'fin_q3' into survey_responses.")
+            
+        # 효과/성과 컬럼 마이그레이션
         if "eff_q1" not in columns:
             conn.execute("ALTER TABLE survey_responses ADD COLUMN eff_q1 INTEGER;")
             logger.info("Migrated column 'eff_q1' into survey_responses.")
-            
         if "eff_q2" not in columns:
             conn.execute("ALTER TABLE survey_responses ADD COLUMN eff_q2 INTEGER;")
             logger.info("Migrated column 'eff_q2' into survey_responses.")
             
         conn.commit()
-        
-        # 데이터가 없을 시 샘플 데이터 시딩
         seed_samples_if_empty(conn)
         
     logger.info("SQLite database and tables initialized successfully in WAL mode.")

@@ -279,21 +279,20 @@ function getRadioValue(name) {
 async function handleFormSubmit(e) {
   e.preventDefault();
 
-  const companyName = document.getElementById('company_name').value.trim();
   const country = document.getElementById('country').value.trim();
 
-  if (!companyName || !country) {
+  if (!country) {
     alert(SURVEY_TRANSLATIONS[currentLang].validation_req);
     return;
   }
 
   const payload = {
     lang: currentLang,
-    company_name: companyName,
+    company_name: "",
     country: country,
     q1_overall: getRadioValue('q1_overall'),
 
-    // 컨퍼런스
+    // 1. IKS 컨퍼런스
     conf_q1: getRadioValue('conf_q1'),
     conf_q2: getMultiSelectValues('#conf_q2_choices'),
     conf_q3_rank1: confQ3Ranks[0] || null,
@@ -302,29 +301,34 @@ async function handleFormSubmit(e) {
     conf_q3_other: document.getElementById('conf_q3_other') ? document.getElementById('conf_q3_other').value.trim() : null,
     conf_q4: document.getElementById('conf_q4') ? document.getElementById('conf_q4').value.trim() : null,
 
-    // 지자체 IR
+    // 2. 지자체 IR
     reg_q1: getRadioValue('reg_q1'),
     reg_q2: getRadioValue('reg_q2'),
     reg_q3_rank1: regQ3Ranks[0] || null,
     reg_q3_rank2: regQ3Ranks[1] || null,
     reg_q3_other: document.getElementById('reg_q3_other') ? document.getElementById('reg_q3_other').value.trim() : null,
 
-    // 세미나
+    // 3. 외투환경 세미나
     semi_q1: getRadioValue('semi_q1'),
     semi_q2: getMultiSelectValues('#semi_q2_choices'),
     semi_q3: document.getElementById('semi_q3') ? document.getElementById('semi_q3').value.trim() : null,
 
-    // M.AX 에너지
+    // 4. M.AX 에너지
     max_q1: getRadioValue('max_q1'),
     max_q2: getMultiSelectValues('#max_q2_choices'),
     max_q3: document.getElementById('max_q3') ? document.getElementById('max_q3').value.trim() : null,
 
-    // VC 포럼
+    // 5. VC 포럼
     vc_q1: getRadioValue('vc_q1'),
     vc_q2: getMultiSelectValues('#vc_q2_choices'),
     vc_q3: document.getElementById('vc_q3') ? document.getElementById('vc_q3').value.trim() : null,
 
-    // [신규] 효과 및 성과
+    // 6. [신규] 재무적 투자포럼
+    fin_q1: getRadioValue('fin_q1'),
+    fin_q2: getMultiSelectValues('#fin_q2_choices'),
+    fin_q3: document.getElementById('fin_q3') ? document.getElementById('fin_q3').value.trim() : null,
+
+    // 7. 효과 및 성과
     eff_q1: getRadioValue('eff_q1'),
     eff_q2: getRadioValue('eff_q2')
   };

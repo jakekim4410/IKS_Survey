@@ -68,61 +68,66 @@ def generate_survey_excel(rows) -> io.BytesIO:
     df_raw = pd.DataFrame(raw_list)
 
     if df_raw.empty:
-        df_display = pd.DataFrame(columns=["ID", "제출일시", "언어", "기업명", "국가", "IKS 총괄 만족도"])
+        df_display = pd.DataFrame(columns=["ID", "제출일시", "언어", "소재국가", "Invest KOREA 2026 총괄 만족도"])
         df_code = df_display.copy()
         df_stats = pd.DataFrame([{"항목": "응답 데이터 없음", "값": 0}])
     else:
         # 1. 텍스트 라벨이 적용된 Display용 DataFrame 구성
         display_records = []
         for r in raw_list:
-            lang = r.get("lang") or "ko"
+            lang = r.get("lang") or "en"
             conf_factors = decode_json_list(r.get("conf_q2"))
             semi_factors = decode_json_list(r.get("semi_q2"))
             max_factors = decode_json_list(r.get("max_q2"))
             vc_factors = decode_json_list(r.get("vc_q2"))
+            fin_factors = decode_json_list(r.get("fin_q2"))
 
             rec = {
                 "ID": r.get("id"),
                 "제출일시": r.get("submitted_at"),
-                "언어": "국문(KR)" if lang == "ko" else "English(EN)",
-                "기업명": r.get("company_name"),
+                "언어": "English(EN)" if lang == "en" else "국문(KR)",
                 "소재국가": r.get("country"),
                 
-                # 총괄
-                "IKS 총괄 만족도": f"{r.get('q1_overall')}점 ({map_scale(r.get('q1_overall'), 'satisfaction', lang)})" if r.get('q1_overall') else "",
+                # 총괄 (문1)
+                "Invest KOREA 2026 총괄 만족도": f"{r.get('q1_overall')}점 ({map_scale(r.get('q1_overall'), 'satisfaction', lang)})" if r.get('q1_overall') else "",
                 
-                # 컨퍼런스
-                "컨퍼런스 만족도": f"{r.get('conf_q1')}점 ({map_scale(r.get('conf_q1'), 'satisfaction', lang)})" if r.get('conf_q1') else "",
-                "컨퍼런스 만족요인": map_factors(conf_factors, lang),
-                "컨퍼런스 희망주제(1순위)": map_conf_topic(r.get("conf_q3_rank1"), lang),
-                "컨퍼런스 희망주제(2순위)": map_conf_topic(r.get("conf_q3_rank2"), lang),
-                "컨퍼런스 희망주제(3순위)": map_conf_topic(r.get("conf_q3_rank3"), lang),
-                "컨퍼런스 희망주제(기타)": r.get("conf_q3_other") or "",
+                # 세션 1: IKS 컨퍼런스 (문2-1, 2-2, 2-3, 2-4)
+                "IKS 컨퍼런스 만족도": f"{r.get('conf_q1')}점 ({map_scale(r.get('conf_q1'), 'satisfaction', lang)})" if r.get('conf_q1') else "",
+                "IKS 컨퍼런스 만족요인": map_factors(conf_factors, lang),
+                "IKS 컨퍼런스 희망주제(1순위)": map_conf_topic(r.get("conf_q3_rank1"), lang),
+                "IKS 컨퍼런스 희망주제(2순위)": map_conf_topic(r.get("conf_q3_rank2"), lang),
+                "IKS 컨퍼런스 희망주제(3순위)": map_conf_topic(r.get("conf_q3_rank3"), lang),
+                "IKS 컨퍼런스 희망주제(기타)": r.get("conf_q3_other") or "",
                 "외투기업 애로사항": r.get("conf_q4") or "",
                 
-                # 지자체 IR
+                # 세션 2: 지자체 IR
                 "지자체IR 만족도": f"{r.get('reg_q1')}점 ({map_scale(r.get('reg_q1'), 'satisfaction', lang)})" if r.get('reg_q1') else "",
                 "지자체IR 투자이해 도움": f"{r.get('reg_q2')}점 ({map_scale(r.get('reg_q2'), 'agreement', lang)})" if r.get('reg_q2') else "",
                 "지자체IR 개선사항(1순위)": map_reg_topic(r.get("reg_q3_rank1"), lang),
                 "지자체IR 개선사항(2순위)": map_reg_topic(r.get("reg_q3_rank2"), lang),
                 "지자체IR 개선사항(기타)": r.get("reg_q3_other") or "",
                 
-                # 세미나
+                # 세션 3: 외투 환경 세미나
                 "외투세미나 만족도": f"{r.get('semi_q1')}점 ({map_scale(r.get('semi_q1'), 'satisfaction', lang)})" if r.get('semi_q1') else "",
                 "외투세미나 만족요인": map_factors(semi_factors, lang),
                 "외투세미나 개선/제안": r.get("semi_q3") or "",
                 
-                # M.AX 포럼
+                # 세션 4: M.AX 에너지 전략 포럼
                 "M.AX포럼 만족도": f"{r.get('max_q1')}점 ({map_scale(r.get('max_q1'), 'satisfaction', lang)})" if r.get('max_q1') else "",
                 "M.AX포럼 만족요인": map_factors(max_factors, lang),
                 "M.AX포럼 개선/제안": r.get("max_q3") or "",
                 
-                # VC 포럼
+                # 세션 5: 글로벌 VC 스타트업 포럼
                 "글로벌VC포럼 만족도": f"{r.get('vc_q1')}점 ({map_scale(r.get('vc_q1'), 'satisfaction', lang)})" if r.get('vc_q1') else "",
                 "글로벌VC포럼 만족요인": map_factors(vc_factors, lang),
                 "글로벌VC포럼 개선/제안": r.get("vc_q3") or "",
 
-                # [신규] 효과/성과
+                # [신규] 세션 6: 재무적 투자포럼
+                "재무적투자포럼 만족도": f"{r.get('fin_q1')}점 ({map_scale(r.get('fin_q1'), 'satisfaction', lang)})" if r.get('fin_q1') else "",
+                "재무적투자포럼 만족요인": map_factors(fin_factors, lang),
+                "재무적투자포럼 개선/제안": r.get("fin_q3") or "",
+
+                # 효과 및 성과
                 "글로벌현안 파악기여도(6-1)": f"{r.get('eff_q1')}점 ({map_scale(r.get('eff_q1'), 'recommendation', lang)})" if r.get('eff_q1') else "",
                 "향후사업 네트워크기여도(6-2)": f"{r.get('eff_q2')}점 ({map_scale(r.get('eff_q2'), 'recommendation', lang)})" if r.get('eff_q2') else "",
             }
@@ -131,25 +136,26 @@ def generate_survey_excel(rows) -> io.BytesIO:
 
         # 2. 통계 요약 DataFrame 생성
         total_count = len(df_raw)
-        ko_count = int((df_raw["lang"] == "ko").sum())
         en_count = int((df_raw["lang"] == "en").sum())
+        ko_count = int((df_raw["lang"] == "ko").sum())
 
         score_cols = {
-            "IKS 행사 전반적 만족도": "q1_overall",
-            "개막식 및 컨퍼런스 만족도": "conf_q1",
-            "지자체 투자환경 IR 만족도": "reg_q1",
+            "Invest KOREA 2026 전반적 만족도": "q1_overall",
+            "IKS 컨퍼런스 만족도 (세션1)": "conf_q1",
+            "지자체 투자환경 IR 만족도 (세션2)": "reg_q1",
             "지자체 IR 투자이해 기여도": "reg_q2",
-            "외투 환경 세미나 만족도": "semi_q1",
-            "M.AX 에너지 전략 포럼 만족도": "max_q1",
-            "글로벌 VC 스타트업 포럼 만족도": "vc_q1",
+            "외투 환경 세미나 만족도 (세션3)": "semi_q1",
+            "M.AX 에너지 전략 포럼 만족도 (세션4)": "max_q1",
+            "글로벌 VC 스타트업 포럼 만족도 (세션5)": "vc_q1",
+            "재무적 투자포럼 만족도 (세션6)": "fin_q1",
             "글로벌 현안 파악 기여도 (6-1)": "eff_q1",
             "향후 사업 및 네트워크 기여도 (6-2)": "eff_q2"
         }
 
         stats_rows = [
             {"지표 / 세션명": "총 응답자 수", "응답 건수": total_count, "평균 점수(5점 만점)": f"{total_count}명", "비고": "100%"},
-            {"지표 / 세션명": "국문(KR) 응답자", "응답 건수": ko_count, "평균 점수(5점 만점)": f"{(ko_count/total_count*100):.1f}%", "비고": "-"},
             {"지표 / 세션명": "영문(EN) 응답자", "응답 건수": en_count, "평균 점수(5점 만점)": f"{(en_count/total_count*100):.1f}%", "비고": "-"},
+            {"지표 / 세션명": "국문(KR) 응답자", "응답 건수": ko_count, "평균 점수(5점 만점)": f"{(ko_count/total_count*100):.1f}%", "비고": "-"},
         ]
 
         for label, col in score_cols.items():
@@ -165,8 +171,6 @@ def generate_survey_excel(rows) -> io.BytesIO:
                 })
 
         df_stats = pd.DataFrame(stats_rows)
-
-        # 3. 원천 수치 코드 데이터
         df_code = df_raw.copy()
 
     output = io.BytesIO()

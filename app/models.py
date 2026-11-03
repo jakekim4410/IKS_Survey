@@ -3,14 +3,14 @@ from pydantic import BaseModel, Field, field_validator
 
 
 class SurveySubmission(BaseModel):
-    lang: str = Field(default="ko", pattern="^(ko|en)$")
-    company_name: str = Field(..., min_length=1, max_length=200)
+    lang: str = Field(default="en", pattern="^(ko|en)$")
+    company_name: Optional[str] = Field(default="", max_length=200)
     country: str = Field(..., min_length=1, max_length=100)
 
     # 총괄 만족도 (1~5)
     q1_overall: Optional[int] = Field(None, ge=1, le=5)
 
-    # 1. Invest KOREA 컨퍼런스
+    # 1. IKS 컨퍼런스
     conf_q1: Optional[int] = Field(None, ge=1, le=5)
     conf_q2: Optional[List[str]] = Field(default_factory=list)  # ["1", "2"]
     conf_q3_rank1: Optional[int] = Field(None, ge=1, le=6)
@@ -41,16 +41,21 @@ class SurveySubmission(BaseModel):
     vc_q2: Optional[List[str]] = Field(default_factory=list)
     vc_q3: Optional[str] = Field(None, max_length=2000)
 
-    # 6. [신규] 효과 및 성과 부분
+    # 6. [신규] 재무적 투자포럼 (Financial Investment Forum)
+    fin_q1: Optional[int] = Field(None, ge=1, le=5)
+    fin_q2: Optional[List[str]] = Field(default_factory=list)
+    fin_q3: Optional[str] = Field(None, max_length=2000)
+
+    # 7. 효과 및 성과 부분
     eff_q1: Optional[int] = Field(None, ge=1, le=5)  # 6-1 글로벌 현안 파악 기여도
     eff_q2: Optional[int] = Field(None, ge=1, le=5)  # 6-2 향후 비즈니스 및 네트워크 기여도
 
-    @field_validator("company_name", "country")
+    @field_validator("country")
     @classmethod
-    def strip_strings(cls, v: str) -> str:
+    def strip_country(cls, v: str) -> str:
         s = v.strip()
         if not s:
-            raise ValueError("Field cannot be empty or blank")
+            raise ValueError("Country cannot be empty or blank")
         return s
 
 

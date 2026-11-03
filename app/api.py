@@ -30,7 +30,7 @@ def get_survey_schema():
 def submit_survey(submission: SurveySubmission, request: Request):
     """
     모바일/웹 설문 응답 저장 API (FastAPI Threadpool + SQLite WAL 모드 활용)
-    동시 접속 300+명 요청을 락 경합 없이 신속하게 처리
+    기본정보에서 국가(country)만 필수 검증
     """
     ip_addr = request.client.host if request.client else "unknown"
     user_agent = request.headers.get("user-agent", "unknown")
@@ -39,6 +39,7 @@ def submit_survey(submission: SurveySubmission, request: Request):
     semi_q2_json = json.dumps(submission.semi_q2, ensure_ascii=False) if submission.semi_q2 else None
     max_q2_json = json.dumps(submission.max_q2, ensure_ascii=False) if submission.max_q2 else None
     vc_q2_json = json.dumps(submission.vc_q2, ensure_ascii=False) if submission.vc_q2 else None
+    fin_q2_json = json.dumps(submission.fin_q2, ensure_ascii=False) if submission.fin_q2 else None
 
     query = """
     INSERT INTO survey_responses (
@@ -49,6 +50,7 @@ def submit_survey(submission: SurveySubmission, request: Request):
         semi_q1, semi_q2, semi_q3,
         max_q1, max_q2, max_q3,
         vc_q1, vc_q2, vc_q3,
+        fin_q1, fin_q2, fin_q3,
         eff_q1, eff_q2,
         ip_address, user_agent
     ) VALUES (
@@ -59,19 +61,21 @@ def submit_survey(submission: SurveySubmission, request: Request):
         ?, ?, ?,
         ?, ?, ?,
         ?, ?, ?,
+        ?, ?, ?,
         ?, ?,
         ?, ?
     )
     """
 
     params = (
-        submission.lang, submission.company_name, submission.country,
+        submission.lang, submission.company_name or "", submission.country,
         submission.q1_overall,
         submission.conf_q1, conf_q2_json, submission.conf_q3_rank1, submission.conf_q3_rank2, submission.conf_q3_rank3, submission.conf_q3_other, submission.conf_q4,
         submission.reg_q1, submission.reg_q2, submission.reg_q3_rank1, submission.reg_q3_rank2, submission.reg_q3_other,
         submission.semi_q1, semi_q2_json, submission.semi_q3,
         submission.max_q1, max_q2_json, submission.max_q3,
         submission.vc_q1, vc_q2_json, submission.vc_q3,
+        submission.fin_q1, fin_q2_json, submission.fin_q3,
         submission.eff_q1, submission.eff_q2,
         ip_addr, user_agent
     )
@@ -87,7 +91,7 @@ def submit_survey(submission: SurveySubmission, request: Request):
             detail=f"설문 저장 중 오류가 발생했습니다: {str(e)}"
         )
 
-    msg = "설문 응답이 성공적으로 제출되었습니다. 감사합니다." if submission.lang == "ko" else "Your survey response has been successfully submitted. Thank you."
+    msg = "Your survey response has been successfully submitted. Thank you." if submission.lang == "en" else "설문 응답이 성공적으로 제출되었습니다. 감사합니다."
     return SubmissionResponse(
         success=True,
         id=inserted_id,
@@ -143,6 +147,7 @@ def get_admin_stats(auth: bool = Depends(verify_admin_key)):
                 AVG(semi_q1) as avg_semi,
                 AVG(max_q1) as avg_max,
                 AVG(vc_q1) as avg_vc,
+                AVG(fin_q1) as avg_fin,
                 AVG(eff_q1) as avg_eff_q1,
                 AVG(eff_q2) as avg_eff_q2
             FROM survey_responses
@@ -156,12 +161,13 @@ def get_admin_stats(auth: bool = Depends(verify_admin_key)):
             "semi": round(row["avg_semi"], 2) if row["avg_semi"] else None,
             "max": round(row["avg_max"], 2) if row["avg_max"] else None,
             "vc": round(row["avg_vc"], 2) if row["avg_vc"] else None,
+            "fin": round(row["avg_fin"], 2) if row["avg_fin"] else None,
             "eff_q1": round(row["avg_eff_q1"], 2) if row["avg_eff_q1"] else None,
             "eff_q2": round(row["avg_eff_q2"], 2) if row["avg_eff_q2"] else None,
         }
 
         cur = conn.execute("""
-            SELECT id, submitted_at, lang, company_name, country, q1_overall
+            SELECT id, submitted_at, lang, country, q1_overall
             FROM survey_responses
             ORDER BY id DESC
             LIMIT 10
