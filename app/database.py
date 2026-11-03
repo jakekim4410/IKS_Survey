@@ -1,5 +1,6 @@
 import sqlite3
 import logging
+import json
 from contextlib import contextmanager
 from app.config import DB_PATH
 
@@ -9,7 +10,7 @@ CREATE_TABLE_SQL = """
 CREATE TABLE IF NOT EXISTS survey_responses (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    lang TEXT NOT NULL DEFAULT 'ko',
+    lang TEXT NOT NULL DEFAULT 'en',
     company_name TEXT NOT NULL,
     country TEXT NOT NULL,
     
@@ -61,6 +62,71 @@ CREATE INDEX IF NOT EXISTS idx_survey_lang ON survey_responses(lang);
 CREATE INDEX IF NOT EXISTS idx_survey_company ON survey_responses(company_name);
 """
 
+SAMPLE_DATA = [
+    {
+        "lang": "en",
+        "company_name": "Vanguard CleanTech Capital Ltd.",
+        "country": "United Kingdom",
+        "q1_overall": 5,
+        "conf_q1": 4,
+        "conf_q2": ["1", "4"],
+        "conf_q3_rank1": 2,
+        "conf_q3_rank2": 5,
+        "conf_q3_rank3": 1,
+        "conf_q3_other": None,
+        "conf_q4": "Streamlining foreign direct investment filing procedures will further boost investor confidence.",
+        "reg_q1": 5,
+        "reg_q2": 5,
+        "reg_q3_rank1": 1,
+        "reg_q3_rank2": 3,
+        "reg_q3_other": None,
+        "semi_q1": 4,
+        "semi_q2": ["2", "4"],
+        "semi_q3": "Pre-circulating speaker presentation decks digitally before sessions was very helpful.",
+        "max_q1": 5,
+        "max_q2": ["1", "3"],
+        "max_q3": "Strategic roadmap on green hydrogen grid expansion was exceptionally insightful.",
+        "vc_q1": 5,
+        "vc_q2": ["1", "4"],
+        "vc_q3": "Recommend scheduling dedicated follow-up 1:1 deal meetings for global VCs.",
+        "eff_q1": 5,
+        "eff_q2": 5,
+        "ip_address": "127.0.0.1",
+        "user_agent": "SampleSeed/1.0"
+    },
+    {
+        "lang": "ko",
+        "company_name": "(주)솔루션테크 코리아",
+        "country": "대한민국",
+        "q1_overall": 5,
+        "conf_q1": 5,
+        "conf_q2": ["1", "2"],
+        "conf_q3_rank1": 1,
+        "conf_q3_rank2": 3,
+        "conf_q3_rank3": 4,
+        "conf_q3_other": None,
+        "conf_q4": "외국인 우수 R&D 인력에 대한 비자 및 정주 여건 지원 정책이 확대되기를 기대합니다.",
+        "reg_q1": 4,
+        "reg_q2": 5,
+        "reg_q3_rank1": 1,
+        "reg_q3_rank2": 2,
+        "reg_q3_other": None,
+        "semi_q1": 4,
+        "semi_q2": ["1", "4"],
+        "semi_q3": "외투기업 세제 혜택과 조세감면 사전 심사 지원 부스 운영을 제안합니다.",
+        "max_q1": 5,
+        "max_q2": ["3", "4"],
+        "max_q3": "국내 대기업과의 배터리 공급망 파트너십 세션이 매우 실질적인 도움이 되었습니다.",
+        "vc_q1": 5,
+        "vc_q2": ["1", "3"],
+        "vc_q3": "딥테크 스타트업 쇼케이스 시간과 IR 발표 부스를 더 확대해주시면 좋겠습니다.",
+        "eff_q1": 5,
+        "eff_q2": 5,
+        "ip_address": "127.0.0.1",
+        "user_agent": "SampleSeed/1.0"
+    }
+]
+
 
 @contextmanager
 def get_db():
@@ -76,8 +142,53 @@ def get_db():
         conn.close()
 
 
+def seed_samples_if_empty(conn):
+    """DB에 데이터가 없을 경우 샘플 2건(영문 1건, 국문 1건)을 자동 등록"""
+    cur = conn.execute("SELECT COUNT(*) FROM survey_responses")
+    count = cur.fetchone()[0]
+    if count == 0:
+        query = """
+        INSERT INTO survey_responses (
+            lang, company_name, country,
+            q1_overall,
+            conf_q1, conf_q2, conf_q3_rank1, conf_q3_rank2, conf_q3_rank3, conf_q3_other, conf_q4,
+            reg_q1, reg_q2, reg_q3_rank1, reg_q3_rank2, reg_q3_other,
+            semi_q1, semi_q2, semi_q3,
+            max_q1, max_q2, max_q3,
+            vc_q1, vc_q2, vc_q3,
+            eff_q1, eff_q2,
+            ip_address, user_agent
+        ) VALUES (
+            ?, ?, ?,
+            ?,
+            ?, ?, ?, ?, ?, ?, ?,
+            ?, ?, ?, ?, ?,
+            ?, ?, ?,
+            ?, ?, ?,
+            ?, ?, ?,
+            ?, ?,
+            ?, ?
+        )
+        """
+        for s in SAMPLE_DATA:
+            params = (
+                s["lang"], s["company_name"], s["country"],
+                s["q1_overall"],
+                s["conf_q1"], json.dumps(s["conf_q2"], ensure_ascii=False), s["conf_q3_rank1"], s["conf_q3_rank2"], s["conf_q3_rank3"], s["conf_q3_other"], s["conf_q4"],
+                s["reg_q1"], s["reg_q2"], s["reg_q3_rank1"], s["reg_q3_rank2"], s["reg_q3_other"],
+                s["semi_q1"], json.dumps(s["semi_q2"], ensure_ascii=False), s["semi_q3"],
+                s["max_q1"], json.dumps(s["max_q2"], ensure_ascii=False), s["max_q3"],
+                s["vc_q1"], json.dumps(s["vc_q2"], ensure_ascii=False), s["vc_q3"],
+                s["eff_q1"], s["eff_q2"],
+                s["ip_address"], s["user_agent"]
+            )
+            conn.execute(query, params)
+        conn.commit()
+        logger.info("Successfully seeded 2 realistic sample survey responses into DB.")
+
+
 def init_db():
-    """앱 시작 시 테이블 초기화 및 신규 컬럼 마이그레이션"""
+    """앱 시작 시 테이블 초기화 및 신규 컬럼 마이그레이션 & 샘플 시딩"""
     with get_db() as conn:
         conn.executescript(CREATE_TABLE_SQL)
         
@@ -94,4 +205,8 @@ def init_db():
             logger.info("Migrated column 'eff_q2' into survey_responses.")
             
         conn.commit()
+        
+        # 데이터가 없을 시 샘플 데이터 시딩
+        seed_samples_if_empty(conn)
+        
     logger.info("SQLite database and tables initialized successfully in WAL mode.")

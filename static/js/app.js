@@ -19,8 +19,8 @@ function initLanguage() {
   if (btnKo) btnKo.addEventListener('click', () => switchLanguage('ko'));
   if (btnEn) btnEn.addEventListener('click', () => switchLanguage('en'));
 
-  // 상단 대형 언어 선택 배너 카드 버튼
-  document.querySelectorAll('.lang-choice-btn').forEach(btn => {
+  // 세그먼트 컨트롤 버튼 바인딩
+  document.querySelectorAll('.segment-btn, .lang-choice-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const selected = btn.getAttribute('data-lang');
       if (selected) switchLanguage(selected);
@@ -41,8 +41,8 @@ function switchLanguage(lang) {
   if (btnKo) btnKo.classList.toggle('active', lang === 'ko');
   if (btnEn) btnEn.classList.toggle('active', lang === 'en');
 
-  // 대형 배너 카드 버튼 상태 동기화
-  document.querySelectorAll('.lang-choice-btn').forEach(btn => {
+  // 세그먼트 버튼 상태 동기화
+  document.querySelectorAll('.segment-btn, .lang-choice-btn').forEach(btn => {
     btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
   });
 

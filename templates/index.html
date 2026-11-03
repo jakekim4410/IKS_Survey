@@ -1,10 +1,91 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>2026 Invest KOREA Summit Participant Survey</title>
-  <link rel="stylesheet" href="/static/css/style.css">
+  <link rel="stylesheet" href="/static/css/style.css?v=25">
+  <style>
+    /* Premium Modern Segmented Language Switcher */
+    .lang-nav-card {
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 12px 14px;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 14px rgba(15, 44, 89, 0.06);
+    }
+    .lang-nav-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      padding: 0 2px;
+    }
+    .lang-nav-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #0f2c59;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .lang-nav-hint {
+      font-size: 11px;
+      color: #64748b;
+    }
+    .segmented-control {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      background: #f1f5f9;
+      padding: 4px;
+      border-radius: 12px;
+      gap: 4px;
+      border: 1px solid #e2e8f0;
+    }
+    .segment-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border: none;
+      border-radius: 9px;
+      background: transparent;
+      color: #64748b;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      user-select: none;
+      outline: none;
+    }
+    .segment-btn:hover {
+      color: #1e293b;
+    }
+    .segment-btn.active {
+      background: #ffffff;
+      color: #0f2c59;
+      box-shadow: 0 2px 8px rgba(15, 44, 89, 0.12), 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+    .segment-flag {
+      font-size: 18px;
+      line-height: 1;
+    }
+    .segment-tag {
+      font-size: 10.5px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 8px;
+      background: #e2e8f0;
+      color: #475569;
+      letter-spacing: 0.3px;
+    }
+    .segment-btn.active .segment-tag {
+      background: #eff6ff;
+      color: #2563eb;
+    }
+  </style>
 </head>
 <body>
 
@@ -21,31 +102,25 @@
   </header>
 
   <main class="container">
-    <!-- Prominent Language Selector Banner (Large, High Contrast, Intuitive) -->
-    <section class="lang-selector-banner">
-      <div class="lang-selector-header">
-        <span class="lang-selector-title">🌐 Select Language / 언어 선택</span>
-        <span class="lang-selector-note">Tap to switch</span>
+    <!-- Premium Segmented Language Switcher Card -->
+    <div class="lang-nav-card">
+      <div class="lang-nav-header">
+        <span class="lang-nav-title">🌐 Select Language / 설문 언어 선택</span>
+        <span class="lang-nav-hint">Tap to switch</span>
       </div>
-      <div class="lang-selector-grid">
-        <button type="button" class="lang-choice-btn active" data-lang="en">
-          <span class="lang-flag">🌐</span>
-          <div class="lang-choice-info">
-            <span class="lang-choice-name">English</span>
-            <span class="lang-choice-desc">Default Language</span>
-          </div>
-          <span class="lang-choice-check">✓</span>
+      <div class="segmented-control">
+        <button type="button" class="segment-btn active" data-lang="en">
+          <span class="segment-flag">🇺🇸</span>
+          <span>English</span>
+          <span class="segment-tag">Default</span>
         </button>
-        <button type="button" class="lang-choice-btn" data-lang="ko">
-          <span class="lang-flag">🇰🇷</span>
-          <div class="lang-choice-info">
-            <span class="lang-choice-name">한국어</span>
-            <span class="lang-choice-desc">국문 설문조사</span>
-          </div>
-          <span class="lang-choice-check">✓</span>
+        <button type="button" class="segment-btn" data-lang="ko">
+          <span class="segment-flag">🇰🇷</span>
+          <span>한국어</span>
+          <span class="segment-tag">KR</span>
         </button>
       </div>
-    </section>
+    </div>
 
     <!-- Intro Card -->
     <section class="intro-card">
@@ -387,8 +462,8 @@
 
   </main>
 
-  <script src="/static/js/survey_content.js?v=5"></script>
-  <script src="/static/js/app.js?v=5"></script>
+  <script src="/static/js/survey_content.js?v=25"></script>
+  <script src="/static/js/app.js?v=25"></script>
 </body>
 </html>
 
