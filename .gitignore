@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+
+# Database & SQLite files
+data/*.db
+data/*.db-wal
+data/*.db-shm
+data/*.xlsx
+*.db
+*.db-wal
+*.db-shm
+
+# OS & IDE
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Temp
+test.py
+parsed_korean_survey.txt

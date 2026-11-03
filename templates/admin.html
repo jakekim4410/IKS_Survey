@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IKS 2026 Survey Admin Dashboard</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+  <style>
+    .admin-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 24px 16px;
+    }
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .kpi-card {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+    .kpi-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+    .kpi-value {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--primary);
+    }
+    .kpi-sub {
+      font-size: 12px;
+      color: var(--accent);
+      margin-top: 4px;
+    }
+    .action-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      background: #ffffff;
+      padding: 16px 20px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-color);
+    }
+    .admin-key-input {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .btn-download {
+      background: #10b981;
+      color: #ffffff;
+      padding: 12px 20px;
+      border-radius: var(--radius-md);
+      border: none;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.2s;
+      text-decoration: none;
+    }
+    .btn-download:hover {
+      background: #059669;
+    }
+    .btn-refresh {
+      background: var(--primary);
+      color: #ffffff;
+      padding: 10px 16px;
+      border-radius: var(--radius-md);
+      border: none;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .table-card {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      overflow-x: auto;
+      box-shadow: var(--shadow);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 13.5px;
+    }
+    th {
+      background: #f1f5f9;
+      color: var(--text-dark);
+      font-weight: 700;
+      padding: 12px 14px;
+      border-bottom: 2px solid var(--border-color);
+      white-space: nowrap;
+    }
+    td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border-color);
+      white-space: nowrap;
+    }
+    tr:hover td {
+      background-color: #f8fafc;
+    }
+    .lang-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .lang-ko { background: #dbeafe; color: #1e40af; }
+    .lang-en { background: #fef3c7; color: #b45309; }
+  </style>
+</head>
+<body style="background-color: #f1f5f9;">
+
+  <header class="app-header">
+    <div class="brand-wrapper">
+      <span class="brand-badge">IKS 2026</span>
+      <span class="brand-title">설문조사 관리자 센터 (Admin Dashboard)</span>
+    </div>
+    <a href="/" target="_blank" style="text-decoration: none; font-size: 13px; font-weight: 600; color: var(--accent);">
+      참가자 설문 페이지 열기 ↗
+    </a>
+  </header>
+
+  <div class="admin-container">
+
+    <!-- Action Bar -->
+    <div class="action-bar">
+      <div class="admin-key-input">
+        <label for="adminSecret" style="font-size: 13px; font-weight: 700; color: var(--text-dark);">인증키:</label>
+        <input type="password" id="adminSecret" value="iks2026admin" class="input-text" style="width: 160px; padding: 8px 10px;">
+        <button type="button" class="btn-refresh" onclick="loadStats()">통계 새로고침</button>
+      </div>
+
+      <button type="button" class="btn-download" onclick="downloadExcel()">
+        📊 엑셀 다운로드 (.xlsx)
+      </button>
+    </div>
+
+    <!-- KPIs -->
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-title">총 응답자 수</div>
+        <div class="kpi-value" id="kpiTotal">0</div>
+        <div class="kpi-sub">목표: 300+명 동시 처리</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">국문(KR) / 영문(EN) 응답</div>
+        <div class="kpi-value" id="kpiLangRatio">0 / 0</div>
+        <div class="kpi-sub" id="kpiLangPercent">KR 0% / EN 0%</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">IKS 총괄 만족도</div>
+        <div class="kpi-value" id="kpiOverallAvg">-</div>
+        <div class="kpi-sub">5.0점 만점 리커트 척도</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">컨퍼런스 만족도</div>
+        <div class="kpi-value" id="kpiConfAvg">-</div>
+        <div class="kpi-sub">개막식 및 컨퍼런스</div>
+      </div>
+    </div>
+
+    <!-- 세션별 만족도 평균 -->
+    <div class="form-section" style="margin-bottom: 24px;">
+      <div class="section-header">
+        <h3 class="section-title">세션별 평균 만족도 요약 (5점 만점)</h3>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px;" id="sessionAveragesGrid">
+        <div style="padding: 10px; background: #f8fafc; border-radius: 8px;">
+          <div style="font-size: 12px; color: #64748b;">지자체 IR 만족도</div>
+          <div style="font-size: 20px; font-weight: 700; color: #0f2c59;" id="avgReg">-</div>
+        </div>
+        <div style="padding: 10px; background: #f8fafc; border-radius: 8px;">
+          <div style="font-size: 12px; color: #64748b;">지자체 투자이해 도움</div>
+          <div style="font-size: 20px; font-weight: 700; color: #0f2c59;" id="avgRegHelp">-</div>
+        </div>
+        <div style="padding: 10px; background: #f8fafc; border-radius: 8px;">
+          <div style="font-size: 12px; color: #64748b;">외투환경 세미나</div>
+          <div style="font-size: 20px; font-weight: 700; color: #0f2c59;" id="avgSemi">-</div>
+        </div>
+        <div style="padding: 10px; background: #f8fafc; border-radius: 8px;">
+          <div style="font-size: 12px; color: #64748b;">M.AX 에너지 포럼</div>
+          <div style="font-size: 20px; font-weight: 700; color: #0f2c59;" id="avgMax">-</div>
+        </div>
+        <div style="padding: 10px; background: #f8fafc; border-radius: 8px;">
+          <div style="font-size: 12px; color: #64748b;">글로벌 VC 포럼</div>
+          <div style="font-size: 20px; font-weight: 700; color: #0f2c59;" id="avgVc">-</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 최근 응답 기록 테이블 -->
+    <div class="form-section">
+      <div class="section-header" style="justify-content: space-between;">
+        <h3 class="section-title">최근 설문 응답 내역 (최신 10건)</h3>
+        <span style="font-size: 12px; color: var(--text-muted);">전체 데이터는 상단 엑셀 다운로드를 이용하세요.</span>
+      </div>
+
+      <div class="table-card">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>제출일시</th>
+              <th>언어</th>
+              <th>기업명</th>
+              <th>국가</th>
+              <th>총괄 만족도</th>
+            </tr>
+          </thead>
+          <tbody id="recentTableBody">
+            <tr><td colspan="6" style="text-align: center; color: #94a3b8; padding: 24px;">응답 데이터를 불러오는 중...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    async function loadStats() {
+      const secret = document.getElementById('adminSecret').value.trim();
+      try {
+        const res = await fetch(`/api/admin/stats?secret=${encodeURIComponent(secret)}`);
+        if (!res.ok) {
+          const err = await res.json();
+          alert(err.detail || '인증에 실패했습니다.');
+          return;
+        }
+        const data = await res.json();
+
+        // KPI
+        document.getElementById('kpiTotal').textContent = data.total_responses + '건';
+        document.getElementById('kpiLangRatio').textContent = `${data.ko_count} / ${data.en_count}`;
+        const total = data.total_responses || 1;
+        const koPct = ((data.ko_count / total) * 100).toFixed(0);
+        const enPct = ((data.en_count / total) * 100).toFixed(0);
+        document.getElementById('kpiLangPercent').textContent = `KR ${koPct}% / EN ${enPct}%`;
+
+        const avgs = data.averages;
+        document.getElementById('kpiOverallAvg').textContent = avgs.overall ? avgs.overall + ' / 5.0' : '-';
+        document.getElementById('kpiConfAvg').textContent = avgs.conf ? avgs.conf + ' / 5.0' : '-';
+        document.getElementById('avgReg').textContent = avgs.reg ? avgs.reg + ' / 5.0' : '-';
+        document.getElementById('avgRegHelp').textContent = avgs.reg_help ? avgs.reg_help + ' / 5.0' : '-';
+        document.getElementById('avgSemi').textContent = avgs.semi ? avgs.semi + ' / 5.0' : '-';
+        document.getElementById('avgMax').textContent = avgs.max ? avgs.max + ' / 5.0' : '-';
+        document.getElementById('avgVc').textContent = avgs.vc ? avgs.vc + ' / 5.0' : '-';
+
+        // Table
+        const tbody = document.getElementById('recentTableBody');
+        tbody.innerHTML = '';
+        if (!data.recent_responses || data.recent_responses.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #94a3b8; padding: 24px;">제출된 설문 응답이 없습니다.</td></tr>';
+          return;
+        }
+
+        data.recent_responses.forEach(r => {
+          const tr = document.createElement('tr');
+          const isKo = r.lang === 'ko';
+          tr.innerHTML = `
+            <td>#${r.id}</td>
+            <td>${r.submitted_at || '-'}</td>
+            <td><span class="lang-badge ${isKo ? 'lang-ko' : 'lang-en'}">${isKo ? '국문 KR' : 'English EN'}</span></td>
+            <td><strong>${r.company_name}</strong></td>
+            <td>${r.country}</td>
+            <td>${r.q1_overall ? r.q1_overall + '점' : '-'}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+
+      } catch (e) {
+        console.error(e);
+        alert('통계 데이터를 불러오는데 실패했습니다.');
+      }
+    }
+
+    function downloadExcel() {
+      const secret = document.getElementById('adminSecret').value.trim();
+      window.location.href = `/api/admin/export?secret=${encodeURIComponent(secret)}`;
+    }
+
+    // 페이지 로드 시 1회 통계 로딩
+    window.addEventListener('DOMContentLoaded', loadStats);
+  </script>
+</body>
+</html>
+

@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>2026 Invest KOREA Summit Participant Survey</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+  <!-- Top Sticky Header with Language Switcher -->
+  <header class="app-header">
+    <div class="brand-wrapper">
+      <span class="brand-badge">IKS 2026</span>
+      <span class="brand-title" data-i18n="badge_survey">참가자 만족도 설문</span>
+    </div>
+    <div class="lang-switch-group">
+      <button type="button" id="btnLangKo" class="lang-btn active">한국어</button>
+      <button type="button" id="btnLangEn" class="lang-btn">English</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Intro Card -->
+    <section class="intro-card">
+      <span class="intro-badge" data-i18n="badge_event">IKS 2026</span>
+      <h1 class="intro-title" data-i18n="title">2026 Invest KOREA Summit 참가자 설문 조사</h1>
+      <p class="intro-desc" data-i18n="intro_desc">
+        Invest KOREA에서는 IKS 2026 참가자를 대상으로 설문조사를 실시하고 있습니다.
+        설문 결과는 사업 성과분석, 향후 개선 및 발전을 위해 활용되며, 응답 내용 및 개인정보는 법에 따라 철저히 보호되고 통계 목적으로만 사용될 예정입니다. 설문조사에 협조해주셔서 대단히 감사드립니다.
+      </p>
+    </section>
+
+    <!-- Survey Form -->
+    <form id="iksSurveyForm">
+
+      <!-- Section: 기본 정보 -->
+      <section class="form-section">
+        <div class="section-header">
+          <span class="section-tag">INFO</span>
+          <h2 class="section-title" data-i18n="sec_info">기본 정보</h2>
+        </div>
+
+        <div class="question-group">
+          <label class="question-title" for="company_name">
+            <span data-i18n="label_company">기업명</span>
+            <span class="required-mark">*</span>
+          </label>
+          <input type="text" id="company_name" class="input-text" data-i18n-ph="ph_company" placeholder="기업명을 입력해주세요" required>
+        </div>
+
+        <div class="question-group">
+          <label class="question-title" for="country">
+            <span data-i18n="label_country">소재 국가</span>
+            <span class="required-mark">*</span>
+          </label>
+          <input type="text" id="country" class="input-text" data-i18n-ph="ph_country" placeholder="소재 국가를 입력해주세요" required>
+        </div>
+      </section>
+
+      <!-- Section: 총괄 만족도 -->
+      <section class="form-section">
+        <div class="section-header">
+          <span class="section-tag">OVERALL</span>
+          <h2 class="section-title" data-i18n="sec_overall">총괄 만족도</h2>
+        </div>
+
+        <div class="question-group">
+          <div class="question-title" data-i18n="q1_overall_title">문1. Invest KOREA Summit(IKS)의 전반적인 만족도는 어떻습니까?</div>
+          <div class="scale-grid scale-satisfaction" data-name="q1_overall">
+            <label class="scale-option" data-value="5">
+              <input type="radio" name="q1_overall" value="5">
+              <div class="scale-num">5</div>
+              <div class="scale-text">매우 만족</div>
+            </label>
+            <label class="scale-option" data-value="4">
+              <input type="radio" name="q1_overall" value="4">
+              <div class="scale-num">4</div>
+              <div class="scale-text">만족</div>
+            </label>
+            <label class="scale-option" data-value="3">
+              <input type="radio" name="q1_overall" value="3">
+              <div class="scale-num">3</div>
+              <div class="scale-text">보통</div>
+            </label>
+            <label class="scale-option" data-value="2">
+              <input type="radio" name="q1_overall" value="2">
+              <div class="scale-num">2</div>
+              <div class="scale-text">불만족</div>
+            </label>
+            <label class="scale-option" data-value="1">
+              <input type="radio" name="q1_overall" value="1">
+              <div class="scale-num">1</div>
+              <div class="scale-text">매우 불만족</div>
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section: Invest KOREA 컨퍼런스 -->
+      <section class="form-section">
+        <div class="section-header">
+          <span class="section-tag">SESSION 1</span>
+          <h2 class="section-title" data-i18n="sec_conf">Invest KOREA 컨퍼런스</h2>
+        </div>
+
+        <!-- 문2-1 -->
+        <div class="question-group">
+          <div class="question-title" data-i18n="conf_q1_title">문2-1. 개막식 및 컨퍼런스의 전반적인 만족도는 어떻습니까?</div>
+          <div class="scale-grid scale-satisfaction" data-name="conf_q1">
+            <label class="scale-option" data-value="5"><input type="radio" name="conf_q1" value="5"><div class="scale-num">5</div><div class="scale-text">매우 만족</div></label>
+            <label class="scale-option" data-value="4"><input type="radio" name="conf_q1" value="4"><div class="scale-num">4</div><div class="scale-text">만족</div></label>
+            <label class="scale-option" data-value="3"><input type="radio" name="conf_q1" value="3"><div class="scale-num">3</div><div class="scale-text">보통</div></label>
+            <label class="scale-option" data-value="2"><input type="radio" name="conf_q1" value="2"><div class="scale-num">2</div><div class="scale-text">불만족</div></label>
+            <label class="scale-option" data-value="1"><input type="radio" name="conf_q1" value="1"><div class="scale-num">1</div><div class="scale-text">매우 불만족</div></label>
+          </div>
+        </div>
+
+        <!-- 문2-2 -->
+        <div class="question-group">
+          <div class="question-title" data-i18n="conf_q2_title">문2-2. 개막식 및 컨퍼런스에서 가장 만족스러웠던 점은 무엇입니까?</div>
+          <div class="question-subtext" data-i18n="sub_multi">(복수 선택 가능)</div>
+          <div class="choice-list factors-choice-group" id="conf_q2_choices">
+            <div class="choice-item" data-id="1"><div class="choice-box"></div><div class="choice-label">내용의 적정성 (주제와 정보가 내 관심사에 맞았다)</div></div>
+            <div class="choice-item" data-id="2"><div class="choice-box"></div><div class="choice-label">연출의 효과성 (무대·영상·부스 등 시각적 연출이 인상적이었다)</div></div>
+            <div class="choice-item" data-id="3"><div class="choice-box"></div><div class="choice-label">참신함 (기존 투자유치행사와 다른 새로운 시도가 있었다)</div></div>
+            <div class="choice-item" data-id="4"><div class="choice-box"></div><div class="choice-label">실질적 도움 (투자 검토에 바로 사용 가능한 정보나 연결을 얻었다)</div></div>
+          </div>
+        </div>
+
+        <!-- 문2-3 -->
+        <div class="question-group">
+          <div class="question-title" data-i18n="conf_q3_title">문2-3. 향후 컨퍼런스에서 반드시 다루어졌으면 하는 내용은 무엇입니까?</div>
+          <div class="question-subtext" data-i18n="sub_rank3">(중요한 순으로 최대 3개까지 터치하여 순위 선택)</div>
+          <div class="rank-list" id="conf_q3_list">
+            <div class="rank-item" data-id="1"><span class="rank-item-text">정부 관계자에 의한 정책방침 및 변화 발표</span><span class="rank-badge"></span></div>
+            <div class="rank-item" data-id="2"><span class="rank-item-text">산업 전문가에 의한 국내 산업동향 및 전망</span><span class="rank-badge"></span></div>
+            <div class="rank-item" data-id="3"><span class="rank-item-text">기업의 한국 투자사례 강연</span><span class="rank-badge"></span></div>
+            <div class="rank-item" data-id="4"><span class="rank-item-text">한국 대기업의 투자계획, 사업계획, 조달방침 설명</span><span class="rank-badge"></span></div>
+            <div class="rank-item" data-id="5"><span class="rank-item-text">세계적으로 저명한 석학을 초청, FDI/통상/경제전망 등 관련 발표 및 패널 토론</span><span class="rank-badge"></span></div>
+            <div class="rank-item" data-id="6"><span class="rank-item-text">기타 (직접 입력)</span><span class="rank-badge"></span></div>
+          </div>
+          <div id="conf_q3_other_wrap" style="display: none; margin-top: 8px;">
+            <input type="text" id="conf_q3_other" class="input-text" data-i18n-ph="conf_q3_ph_other" placeholder="기타 희망 내용을 입력해주세요">
+          </div>
+        </div>
+
+        <!-- 문2-4 -->
+        <div class="question-group">
+          <div class="question-title" data-i18n="conf_q4_title">문2-4. (외투기업 대상) 국내 사업 경영 중 애로사항이 있으시면 자유롭게 기재하여 주십시오</div>
+          <div class="question-subtext" data-i18n="conf_q4_note">* 단, 기업 간의 사적 분쟁, 개별기업의 영업에 관한 사항, 국제 표준에 반하는 요구는 제외</div>
+          <textarea id="conf_q4" class="input-textarea" data-i18n-ph="ph_optional" placeholder="자유롭게 의견을 남겨주세요 (선택사항)"></textarea>
+        </div>
+      </section>
+
+      <!-- Section: 지자체 투자환경 IR -->
+      <section class="form-section">
+        <div class="section-header">
+          <span class="section-tag">SESSION 2</span>
+          <h2 class="section-title" data-i18n="sec_reg">지자체 투자환경 IR</h2>
+        </div>
+
+        <!-- 문1 -->
+        <div class="question-group">
+          <div class="question-title" data-i18n="reg_q1_title">문1. 지자체 투자환경 IR의 전반적인 만족도는 어떻습니까?</div>
+          <div class="scale-grid scale-satisfaction" data-name="reg_q1">
+            <label class="scale-option" data-value="5"><input type="radio" name="reg_q1" value="5"><div class="scale-num">5</div><div class="scale-text">매우 만족</div></label>
+            <label class="scale-option" data-value="4"><input type="radio" name="reg_q1" value="4"><div class="scale-num">4</div><div class="scale-text">만족</div></label>
+            <label class="scale-option" data-value="3"><input type="radio" name="reg_q1" value="3"><div class="scale-num">3</div><div class="scale-text">보통</div></label>
+            <label class="scale-option" data-value="2"><input type="radio" name="reg_q1" value="2"><div class="scale-num">2</div><div class="scale-text">불만족</div></label>
+            <label class="scale-option" data-value="1"><input type="radio" name="reg_q1" value="1"><div class="scale-num">1</div><div class="scale-text">매우 불만족</div></label>
+          </div>
+        </div>
+
+        <!-- 문2 -->
+        <div class="question-group">
+          <div class="question-title" data-i18n="reg_q2_title">문2. 지자체 투자환경 IR이 지자체 환경에 대한 이해 또는 투자유치를 확대하는 데 도움이 되었습니까?</div>
+          <div class="scale-grid scale-agreement" data-name="reg_q2">
+            <label class="scale-option" data-value="5"><input type="radio" name="reg_q2" value="5"><div class="scale-num">5</div><div class="scale-text">매우 그렇다</div></label>
+            <label class="scale-option" data-value="4"><input type="radio" name="reg_q2" value="4"><div class="scale-num">4</div><div class="scale-text">그렇다</div></label>
+            <label class="scale-option" data-value="3"><input type="radio" name="reg_q2" value="3"><div class="scale-num">3</div><div class="scale-text">보통</div></label>
+            <label class="scale-option" data-value="2"><input type="radio" name="reg_q2" value="2"><div class="scale-num">2</div><div class="scale-text">그렇지 않다</div></label>
+            <label class="scale-option" data-value="1"><input type="radio" name="reg_q2" value="1"><div class="scale-num">1</div><div class="scale-text">매우 그렇지 않다</div></label>
+          </div>
+        </div>
+
+        <!-- 문3 -->
+        <div class="question-group">
+          <div class="question-title" data-i18n="reg_q3_title">문3. 지자체 투자환경 IR의 상담 성과를 제고하기 위해 개선되어야 할 사항은 무엇입니까?</div>
+          <div class="question-subtext" data-i18n="sub_rank2">(중요한 순으로 최대 2개까지 터치하여 순위 선택)</div>
+          <div class="rank-list" id="reg_q3_list">
+            <div class="rank-item" data-id="1"><span class="rank-item-text">국내기업과 외국인투자자 간의 보다 타겟화된 매칭</span><span class="rank-badge"></span></div>
+            <div class="rank-item" data-id="2"><span class="rank-item-text">개별 상담 시간의 확대</span><span class="rank-badge"></span></div>
+            <div class="rank-item" data-id="3"><span class="rank-item-text">상담 주선 시스템의 개선</span><span class="rank-badge"></span></div>
+            <div class="rank-item" data-id="4"><span class="rank-item-text">원활한 소통을 위한 통역 서비스 개선</span><span class="rank-badge"></span></div>
+            <div class="rank-item" data-id="5"><span class="rank-item-text">기타 (직접 입력)</span><span class="rank-badge"></span></div>
+          </div>
+          <div id="reg_q3_other_wrap" style="display: none; margin-top: 8px;">
+            <input type="text" id="reg_q3_other" class="input-text" data-i18n-ph="reg_q3_ph_other" placeholder="기타 개선사항을 입력해주세요">
+          </div>
+        </div>
+      </section>
+
+      <!-- Section: 외투 환경 세미나 -->
+      <section class="form-section">
+        <div class="section-header">
+          <span class="section-tag">SESSION 3</span>
+          <h2 class="section-title" data-i18n="sec_semi">외투 환경 세미나</h2>
+        </div>
+
+        <div class="question-group">
+          <div class="question-title" data-i18n="semi_q1_title">문1. 외투 환경 세미나의 전반적인 만족도는 어떻습니까?</div>
+          <div class="scale-grid scale-satisfaction" data-name="semi_q1">
+            <label class="scale-option" data-value="5"><input type="radio" name="semi_q1" value="5"><div class="scale-num">5</div><div class="scale-text">매우 만족</div></label>
+            <label class="scale-option" data-value="4"><input type="radio" name="semi_q1" value="4"><div class="scale-num">4</div><div class="scale-text">만족</div></label>
+            <label class="scale-option" data-value="3"><input type="radio" name="semi_q1" value="3"><div class="scale-num">3</div><div class="scale-text">보통</div></label>
+            <label class="scale-option" data-value="2"><input type="radio" name="semi_q1" value="2"><div class="scale-num">2</div><div class="scale-text">불만족</div></label>
+            <label class="scale-option" data-value="1"><input type="radio" name="semi_q1" value="1"><div class="scale-num">1</div><div class="scale-text">매우 불만족</div></label>
+          </div>
+        </div>
+
+        <div class="question-group">
+          <div class="question-title" data-i18n="semi_q2_title">문2. 외투 환경 세미나에서 가장 만족스러웠던 점은 무엇입니까?</div>
+          <div class="question-subtext" data-i18n="sub_multi">(복수 선택 가능)</div>
+          <div class="choice-list factors-choice-group" id="semi_q2_choices">
+            <div class="choice-item" data-id="1"><div class="choice-box"></div><div class="choice-label">내용의 적정성 (주제와 정보가 내 관심사에 맞았다)</div></div>
+            <div class="choice-item" data-id="2"><div class="choice-box"></div><div class="choice-label">연출의 효과성 (무대·영상·부스 등 시각적 연출이 인상적이었다)</div></div>
+            <div class="choice-item" data-id="3"><div class="choice-box"></div><div class="choice-label">참신함 (기존 투자유치행사와 다른 새로운 시도가 있었다)</div></div>
+            <div class="choice-item" data-id="4"><div class="choice-box"></div><div class="choice-label">실질적 도움 (투자 검토에 바로 사용 가능한 정보나 연결을 얻었다)</div></div>
+          </div>
+        </div>
+
+        <div class="question-group">
+          <div class="question-title" data-i18n="semi_q3_title">문3. 외투 환경 세미나에서 개선 또는 제안하고 싶은 사항은 무엇입니까?</div>
+          <textarea id="semi_q3" class="input-textarea" data-i18n-ph="ph_optional" placeholder="자유롭게 의견을 남겨주세요 (선택사항)"></textarea>
+        </div>
+      </section>
+
+      <!-- Section: M.AX 에너지 전략 포럼 -->
+      <section class="form-section">
+        <div class="section-header">
+          <span class="section-tag">SESSION 4</span>
+          <h2 class="section-title" data-i18n="sec_max">M.AX 에너지 전략 포럼</h2>
+        </div>
+
+        <div class="question-group">
+          <div class="question-title" data-i18n="max_q1_title">문1. M.AX 에너지 전략 포럼의 전반적인 만족도는 어떻습니까?</div>
+          <div class="scale-grid scale-satisfaction" data-name="max_q1">
+            <label class="scale-option" data-value="5"><input type="radio" name="max_q1" value="5"><div class="scale-num">5</div><div class="scale-text">매우 만족</div></label>
+            <label class="scale-option" data-value="4"><input type="radio" name="max_q1" value="4"><div class="scale-num">4</div><div class="scale-text">만족</div></label>
+            <label class="scale-option" data-value="3"><input type="radio" name="max_q1" value="3"><div class="scale-num">3</div><div class="scale-text">보통</div></label>
+            <label class="scale-option" data-value="2"><input type="radio" name="max_q1" value="2"><div class="scale-num">2</div><div class="scale-text">불만족</div></label>
+            <label class="scale-option" data-value="1"><input type="radio" name="max_q1" value="1"><div class="scale-num">1</div><div class="scale-text">매우 불만족</div></label>
+          </div>
+        </div>
+
+        <div class="question-group">
+          <div class="question-title" data-i18n="max_q2_title">문2. M.AX 에너지 전략 포럼에서 가장 만족스러웠던 점은 무엇입니까?</div>
+          <div class="question-subtext" data-i18n="sub_multi">(복수 선택 가능)</div>
+          <div class="choice-list factors-choice-group" id="max_q2_choices">
+            <div class="choice-item" data-id="1"><div class="choice-box"></div><div class="choice-label">내용의 적정성 (주제와 정보가 내 관심사에 맞았다)</div></div>
+            <div class="choice-item" data-id="2"><div class="choice-box"></div><div class="choice-label">연출의 효과성 (무대·영상·부스 등 시각적 연출이 인상적이었다)</div></div>
+            <div class="choice-item" data-id="3"><div class="choice-box"></div><div class="choice-label">참신함 (기존 투자유치행사와 다른 새로운 시도가 있었다)</div></div>
+            <div class="choice-item" data-id="4"><div class="choice-box"></div><div class="choice-label">실질적 도움 (투자 검토에 바로 사용 가능한 정보나 연결을 얻었다)</div></div>
+          </div>
+        </div>
+
+        <div class="question-group">
+          <div class="question-title" data-i18n="max_q3_title">문3. M.AX 에너지 전략 포럼 중 개선 또는 제안하고 싶은 사항은 무엇입니까?</div>
+          <textarea id="max_q3" class="input-textarea" data-i18n-ph="ph_optional" placeholder="자유롭게 의견을 남겨주세요 (선택사항)"></textarea>
+        </div>
+      </section>
+
+      <!-- Section: 글로벌 VC 스타트업 포럼 -->
+      <section class="form-section">
+        <div class="section-header">
+          <span class="section-tag">SESSION 5</span>
+          <h2 class="section-title" data-i18n="sec_vc">글로벌 VC 스타트업 포럼</h2>
+        </div>
+
+        <div class="question-group">
+          <div class="question-title" data-i18n="vc_q1_title">문1. 글로벌 VC 스타트업 포럼의 전반적인 만족도는 어떻습니까?</div>
+          <div class="scale-grid scale-satisfaction" data-name="vc_q1">
+            <label class="scale-option" data-value="5"><input type="radio" name="vc_q1" value="5"><div class="scale-num">5</div><div class="scale-text">매우 만족</div></label>
+            <label class="scale-option" data-value="4"><input type="radio" name="vc_q1" value="4"><div class="scale-num">4</div><div class="scale-text">만족</div></label>
+            <label class="scale-option" data-value="3"><input type="radio" name="vc_q1" value="3"><div class="scale-num">3</div><div class="scale-text">보통</div></label>
+            <label class="scale-option" data-value="2"><input type="radio" name="vc_q1" value="2"><div class="scale-num">2</div><div class="scale-text">불만족</div></label>
+            <label class="scale-option" data-value="1"><input type="radio" name="vc_q1" value="1"><div class="scale-num">1</div><div class="scale-text">매우 불만족</div></label>
+          </div>
+        </div>
+
+        <div class="question-group">
+          <div class="question-title" data-i18n="vc_q2_title">문2. 글로벌 VC 스타트업 포럼에서 가장 만족스러웠던 점은 무엇입니까?</div>
+          <div class="question-subtext" data-i18n="sub_multi">(복수 선택 가능)</div>
+          <div class="choice-list factors-choice-group" id="vc_q2_choices">
+            <div class="choice-item" data-id="1"><div class="choice-box"></div><div class="choice-label">내용의 적정성 (주제와 정보가 내 관심사에 맞았다)</div></div>
+            <div class="choice-item" data-id="2"><div class="choice-box"></div><div class="choice-label">연출의 효과성 (무대·영상·부스 등 시각적 연출이 인상적이었다)</div></div>
+            <div class="choice-item" data-id="3"><div class="choice-box"></div><div class="choice-label">참신함 (기존 투자유치행사와 다른 새로운 시도가 있었다)</div></div>
+            <div class="choice-item" data-id="4"><div class="choice-box"></div><div class="choice-label">실질적 도움 (투자 검토에 바로 사용 가능한 정보나 연결을 얻었다)</div></div>
+          </div>
+        </div>
+
+        <div class="question-group">
+          <div class="question-title" data-i18n="vc_q3_title">문3. 글로벌 VC 스타트업 포럼 중 개선 또는 제안하고 싶은 사항은 무엇입니까?</div>
+          <textarea id="vc_q3" class="input-textarea" data-i18n-ph="ph_optional" placeholder="자유롭게 의견을 남겨주세요 (선택사항)"></textarea>
+        </div>
+      </section>
+
+      <!-- Submit Section -->
+      <div class="submit-wrapper">
+        <button type="submit" id="btnSubmit" class="btn-submit">
+          <div class="spinner" id="submitSpinner"></div>
+          <span id="btnSubmitText" data-i18n="btn_submit">설문 응답 제출하기</span>
+        </button>
+      </div>
+
+    </form>
+
+    <!-- Success Feedback View -->
+    <div id="successCard" class="success-card">
+      <div class="success-icon">✓</div>
+      <h2 class="success-title" data-i18n="success_title">설문 제출 완료</h2>
+      <p class="success-desc" data-i18n="success_desc">
+        소중한 응답이 안전하게 저장되었습니다.<br>
+        Invest KOREA Summit 2026에 참여해주셔서 진심으로 감사드립니다.
+      </p>
+      <button type="button" id="btnRestart" class="btn-submit" style="max-width: 240px; margin: 0 auto;" data-i18n="btn_done">
+        처음으로 돌아가기
+      </button>
+    </div>
+
+  </main>
+
+  <script src="/static/js/survey_content.js"></script>
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
+
