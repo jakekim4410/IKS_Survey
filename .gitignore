@@ -26,4 +26,5 @@ Thumbs.db
 # Temp
 test.py
 parsed_korean_survey.txt
+.env
 

@@ -5,6 +5,7 @@ from app.config import ADMIN_SECRET
 from app.database import get_db
 from app.models import SurveySubmission, SubmissionResponse
 from app.excel_exporter import generate_survey_excel
+from app import supabase_client
 from app.survey_data import SURVEY_METADATA
 
 router = APIRouter(prefix="/api")
@@ -34,6 +35,50 @@ def submit_survey(submission: SurveySubmission, request: Request):
     """
     ip_addr = request.client.host if request.client else "unknown"
     user_agent = request.headers.get("user-agent", "unknown")
+
+    # 1. Supabase 연동 시도 (영구 클라우드 DB)
+    if supabase_client.is_supabase_enabled():
+        record = {
+            "lang": submission.lang,
+            "company_name": submission.company_name or "",
+            "country": submission.country,
+            "q1_overall": submission.q1_overall,
+            "conf_q1": submission.conf_q1,
+            "conf_q2": submission.conf_q2,
+            "conf_q3_rank1": submission.conf_q3_rank1,
+            "conf_q3_rank2": submission.conf_q3_rank2,
+            "conf_q3_rank3": submission.conf_q3_rank3,
+            "conf_q3_other": submission.conf_q3_other,
+            "conf_q4": submission.conf_q4,
+            "reg_q1": submission.reg_q1,
+            "reg_q2": submission.reg_q2,
+            "reg_q3_rank1": submission.reg_q3_rank1,
+            "reg_q3_rank2": submission.reg_q3_rank2,
+            "reg_q3_other": submission.reg_q3_other,
+            "semi_q1": submission.semi_q1,
+            "semi_q2": submission.semi_q2,
+            "semi_q3": submission.semi_q3,
+            "max_q1": submission.max_q1,
+            "max_q2": submission.max_q2,
+            "max_q3": submission.max_q3,
+            "vc_q1": submission.vc_q1,
+            "vc_q2": submission.vc_q2,
+            "vc_q3": submission.vc_q3,
+            "fin_q1": submission.fin_q1,
+            "fin_q2": submission.fin_q2,
+            "fin_q3": submission.fin_q3,
+            "eff_q1": submission.eff_q1,
+            "eff_q2": submission.eff_q2,
+            "eff_q3": submission.eff_q3,
+            "ip_address": ip_addr,
+            "user_agent": user_agent
+        }
+        try:
+            inserted_id = supabase_client.insert_response(record)
+            msg = "Your survey response has been successfully submitted. Thank you." if submission.lang == "en" else "설문 응답이 성공적으로 제출되었습니다. 감사합니다."
+            return SubmissionResponse(success=True, id=inserted_id, message=msg)
+        except Exception as e:
+            logger.warning(f"Supabase 저장 중 오류, 로컬 SQLite로 대체합니다: {e}")
 
     conf_q2_json = json.dumps(submission.conf_q2, ensure_ascii=False) if submission.conf_q2 else None
     semi_q2_json = json.dumps(submission.semi_q2, ensure_ascii=False) if submission.semi_q2 else None
@@ -103,11 +148,20 @@ def submit_survey(submission: SurveySubmission, request: Request):
 def export_survey_excel(auth: bool = Depends(verify_admin_key)):
     """
     [3단계] 관리자 전용 엑셀 다운로드 API
-    DB 전체 응답 기록을 .xlsx 파일로 변환하여 다운로드 제공
+    Supabase 클라우드(또는 SQLite) 전체 응답 기록을 .xlsx 파일로 변환하여 다운로드 제공
     """
-    with get_db() as conn:
-        cursor = conn.execute("SELECT * FROM survey_responses ORDER BY id ASC")
-        rows = cursor.fetchall()
+    rows = []
+    if supabase_client.is_supabase_enabled():
+        try:
+            rows = supabase_client.fetch_all_responses()
+        except Exception as e:
+            logger.warning(f"Supabase 엑셀 데이터 조회 실패, SQLite로 대체: {e}")
+            rows = []
+
+    if not rows:
+        with get_db() as conn:
+            cursor = conn.execute("SELECT * FROM survey_responses ORDER BY id ASC")
+            rows = cursor.fetchall()
 
     excel_stream = generate_survey_excel(rows)
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -127,7 +181,13 @@ def export_survey_excel(auth: bool = Depends(verify_admin_key)):
 
 @router.get("/admin/stats")
 def get_admin_stats(auth: bool = Depends(verify_admin_key)):
-    """관리자 대시보드 실시간 통계 KPI API"""
+    """관리자 대시보드 실시간 통계 KPI API (Supabase 클라우드 우선 조회)"""
+    if supabase_client.is_supabase_enabled():
+        try:
+            return supabase_client.get_stats()
+        except Exception as e:
+            logger.warning(f"Supabase 통계 조회 실패, SQLite로 대체: {e}")
+
     with get_db() as conn:
         cur = conn.execute("SELECT COUNT(*) FROM survey_responses")
         total_count = cur.fetchone()[0]
@@ -187,7 +247,13 @@ def get_admin_stats(auth: bool = Depends(verify_admin_key)):
 
 @router.post("/admin/reset")
 def reset_survey_data(auth: bool = Depends(verify_admin_key)):
-    """관리자 전용: 설문 응답 데이터 전체 초기화 (0건으로 리셋)"""
+    """관리자 전용: 설문 응답 데이터 전체 초기화 (Supabase + SQLite 동시 0건 리셋)"""
+    if supabase_client.is_supabase_enabled():
+        try:
+            supabase_client.reset_all_responses()
+        except Exception as e:
+            logger.warning(f"Supabase 데이터 초기화 실패: {e}")
+
     with get_db() as conn:
         conn.execute("DELETE FROM survey_responses;")
         try:

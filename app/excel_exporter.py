@@ -9,9 +9,11 @@ from app.survey_data import SURVEY_METADATA
 def decode_json_list(val):
     if not val:
         return []
+    if isinstance(val, list):
+        return [str(x) for x in val]
     try:
         data = json.loads(val)
-        return data if isinstance(data, list) else [data]
+        return [str(x) for x in data] if isinstance(data, list) else [str(data)]
     except Exception:
         return [str(val)]
 
