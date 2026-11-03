@@ -47,6 +47,11 @@ const SURVEY_TRANSLATIONS = {
     vc_q2_title: "문2. 글로벌 VC 스타트업 포럼에서 가장 만족스러웠던 점은 무엇입니까?",
     vc_q3_title: "문3. 글로벌 VC 스타트업 포럼 중 개선 또는 제안하고 싶은 사항은 무엇입니까?",
 
+    // [신규] 효과 및 성과 부분
+    sec_eff: "효과 및 성과 부분",
+    eff_q1_title: "6-1. Invest KOREA Summit 2026이 글로벌 현안과 당면과제를 시의적절하게 파악하는데 도움이 되었다고 생각하십니까?",
+    eff_q2_title: "6-2. Invest KOREA Summit 2026을 통해서 확보한 정보, 네트워크 등이 향후에도 귀 사의 사업에 도움이 될 것이라고 생각하십니까?",
+
     btn_submit: "설문 응답 제출하기",
     btn_submitting: "응답 저장 중...",
     
@@ -68,10 +73,17 @@ const SURVEY_TRANSLATIONS = {
       { val: 2, text: "그렇지 않다" },
       { val: 1, text: "매우 그렇지 않다" }
     ],
+    scales_recommendation: [
+      { val: 5, text: "매우 만족(추천)" },
+      { val: 4, text: "만족" },
+      { val: 3, text: "보통" },
+      { val: 2, text: "불만" },
+      { val: 1, text: "매우 불만(비추천)" }
+    ],
 
     factors: [
       { id: "1", text: "내용의 적정성 (주제와 정보가 내 관심사에 맞았다)" },
-      { id: "2", 연출: "연출의 효과성 (무대·영상·부스 등 시각적 연출이 인상적이었다)" },
+      { id: "2", text: "연출의 효과성 (무대·영상·부스 등 시각적 연출이 인상적이었다)" },
       { id: "3", text: "참신함 (기존 투자유치행사와 다른 새로운 시도가 있었다)" },
       { id: "4", text: "실질적 도움 (투자 검토에 바로 사용 가능한 정보나 연결을 얻었다)" }
     ],
@@ -147,6 +159,11 @@ const SURVEY_TRANSLATIONS = {
     vc_q2_title: "Q2. What did you find most satisfying about the Global VC Startup Forum?",
     vc_q3_title: "Q3. What improvements or suggestions do you have for the Global VC Startup Forum?",
 
+    // [New] Outcomes & Impact
+    sec_eff: "Outcomes & Impact",
+    eff_q1_title: "6-1. Did Invest KOREA Summit 2026 enhance your understanding of global investment trends and key issues?",
+    eff_q2_title: "6-2. Do you expect the information and business connections gained at Invest KOREA Summit 2026 to benefit your future business activities?",
+
     btn_submit: "Submit Survey",
     btn_submitting: "Submitting...",
 
@@ -162,6 +179,13 @@ const SURVEY_TRANSLATIONS = {
       { val: 1, text: "Very dissatisfied" }
     ],
     scales_agreement: [
+      { val: 5, text: "Strongly agree" },
+      { val: 4, text: "Agree" },
+      { val: 3, text: "Neutral" },
+      { val: 2, text: "Disagree" },
+      { val: 1, text: "Strongly disagree" }
+    ],
+    scales_recommendation: [
       { val: 5, text: "Strongly agree" },
       { val: 4, text: "Agree" },
       { val: 3, text: "Neutral" },
@@ -199,4 +223,3 @@ const SURVEY_TRANSLATIONS = {
     validation_req: "Company name and Country are required."
   }
 };
-

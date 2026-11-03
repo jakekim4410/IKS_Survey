@@ -45,6 +45,22 @@ SURVEY_METADATA = {
             1: "Strongly disagree"
         }
     },
+    "scale_5pt_recommendation": {
+        "ko": {
+            5: "매우 만족(추천)",
+            4: "만족",
+            3: "보통",
+            2: "불만",
+            1: "매우 불만(비추천)"
+        },
+        "en": {
+            5: "Strongly agree",
+            4: "Agree",
+            3: "Neutral",
+            2: "Disagree",
+            1: "Strongly disagree"
+        }
+    },
     "four_satisfaction_factors": {
         "ko": {
             "1": "내용의 적정성 (주제와 정보가 내 관심사에 맞았다)",
@@ -94,4 +110,3 @@ SURVEY_METADATA = {
         }
     }
 }
-

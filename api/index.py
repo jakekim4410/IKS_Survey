@@ -9,3 +9,4 @@ if str(ROOT_DIR) not in sys.path:
 from main import app
 
 # Vercel Python WSGI/ASGI 핸들러로 app 노출
+

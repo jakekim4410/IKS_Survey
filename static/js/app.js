@@ -86,6 +86,18 @@ function updateScales(lang) {
       }
     });
   });
+
+  // 효과/성과 추천 척도 (6-1, 6-2)
+  document.querySelectorAll('.scale-recommendation').forEach(container => {
+    container.querySelectorAll('.scale-option').forEach(opt => {
+      const val = parseInt(opt.getAttribute('data-value'), 10);
+      const item = t.scales_recommendation.find(s => s.val === val);
+      if (item) {
+        const textEl = opt.querySelector('.scale-text');
+        if (textEl) textEl.textContent = item.text;
+      }
+    });
+  });
 }
 
 function updateFactors(lang) {
@@ -292,7 +304,11 @@ async function handleFormSubmit(e) {
     // VC 포럼
     vc_q1: getRadioValue('vc_q1'),
     vc_q2: getMultiSelectValues('#vc_q2_choices'),
-    vc_q3: document.getElementById('vc_q3') ? document.getElementById('vc_q3').value.trim() : null
+    vc_q3: document.getElementById('vc_q3') ? document.getElementById('vc_q3').value.trim() : null,
+
+    // [신규] 효과 및 성과
+    eff_q1: getRadioValue('eff_q1'),
+    eff_q2: getRadioValue('eff_q2')
   };
 
   const btnSubmit = document.getElementById('btnSubmit');

@@ -33,6 +33,8 @@ def map_scale(val, scale_type="satisfaction", lang="ko"):
         return str(val)
     if scale_type == "satisfaction":
         return SURVEY_METADATA["scale_5pt_satisfaction"][lang].get(val, str(val))
+    elif scale_type == "recommendation":
+        return SURVEY_METADATA["scale_5pt_recommendation"][lang].get(val, str(val))
     else:
         return SURVEY_METADATA["scale_5pt_agreement"][lang].get(val, str(val))
 
@@ -66,7 +68,6 @@ def generate_survey_excel(rows) -> io.BytesIO:
     df_raw = pd.DataFrame(raw_list)
 
     if df_raw.empty:
-        # 빈 데이터프레임 처리
         df_display = pd.DataFrame(columns=["ID", "제출일시", "언어", "기업명", "국가", "IKS 총괄 만족도"])
         df_code = df_display.copy()
         df_stats = pd.DataFrame([{"항목": "응답 데이터 없음", "값": 0}])
@@ -120,6 +121,10 @@ def generate_survey_excel(rows) -> io.BytesIO:
                 "글로벌VC포럼 만족도": f"{r.get('vc_q1')}점 ({map_scale(r.get('vc_q1'), 'satisfaction', lang)})" if r.get('vc_q1') else "",
                 "글로벌VC포럼 만족요인": map_factors(vc_factors, lang),
                 "글로벌VC포럼 개선/제안": r.get("vc_q3") or "",
+
+                # [신규] 효과/성과
+                "글로벌현안 파악기여도(6-1)": f"{r.get('eff_q1')}점 ({map_scale(r.get('eff_q1'), 'recommendation', lang)})" if r.get('eff_q1') else "",
+                "향후사업 네트워크기여도(6-2)": f"{r.get('eff_q2')}점 ({map_scale(r.get('eff_q2'), 'recommendation', lang)})" if r.get('eff_q2') else "",
             }
             display_records.append(rec)
         df_display = pd.DataFrame(display_records)
@@ -136,7 +141,9 @@ def generate_survey_excel(rows) -> io.BytesIO:
             "지자체 IR 투자이해 기여도": "reg_q2",
             "외투 환경 세미나 만족도": "semi_q1",
             "M.AX 에너지 전략 포럼 만족도": "max_q1",
-            "글로벌 VC 스타트업 포럼 만족도": "vc_q1"
+            "글로벌 VC 스타트업 포럼 만족도": "vc_q1",
+            "글로벌 현안 파악 기여도 (6-1)": "eff_q1",
+            "향후 사업 및 네트워크 기여도 (6-2)": "eff_q2"
         }
 
         stats_rows = [
@@ -162,7 +169,6 @@ def generate_survey_excel(rows) -> io.BytesIO:
         # 3. 원천 수치 코드 데이터
         df_code = df_raw.copy()
 
-    # 엑셀 워크북 작성 및 스타일링
     output = io.BytesIO()
     with pd.ExcelWriter(output, engine="openpyxl") as writer:
         df_display.to_excel(writer, sheet_name="설문응답_상세", index=False)
@@ -183,7 +189,6 @@ def generate_survey_excel(rows) -> io.BytesIO:
 
         for sheet in workbook.worksheets:
             sheet.views.sheetView[0].showGridLines = True
-            # 헤더 스타일링
             for cell in sheet[1]:
                 cell.font = header_font
                 cell.fill = header_fill
@@ -191,7 +196,6 @@ def generate_survey_excel(rows) -> io.BytesIO:
 
             sheet.row_dimensions[1].height = 28
 
-            # 모든 데이터 셀 스타일링 및 열 너비 자동 조절
             for col in sheet.columns:
                 max_len = 0
                 col_letter = get_column_letter(col[0].column)
@@ -201,7 +205,6 @@ def generate_survey_excel(rows) -> io.BytesIO:
                         cell.font = cell_font
                         cell.alignment = Alignment(vertical="center")
                     val_str = str(cell.value or "")
-                    # 한국어 문자 고려한 글자 길이 추정
                     line_len = max([len(line.encode('cp949', errors='ignore')) for line in val_str.split('\n')] or [0])
                     if line_len > max_len:
                         max_len = line_len
@@ -210,4 +213,3 @@ def generate_survey_excel(rows) -> io.BytesIO:
 
     output.seek(0)
     return output
-

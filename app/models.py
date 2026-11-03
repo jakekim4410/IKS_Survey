@@ -41,6 +41,10 @@ class SurveySubmission(BaseModel):
     vc_q2: Optional[List[str]] = Field(default_factory=list)
     vc_q3: Optional[str] = Field(None, max_length=2000)
 
+    # 6. [신규] 효과 및 성과 부분
+    eff_q1: Optional[int] = Field(None, ge=1, le=5)  # 6-1 글로벌 현안 파악 기여도
+    eff_q2: Optional[int] = Field(None, ge=1, le=5)  # 6-2 향후 비즈니스 및 네트워크 기여도
+
     @field_validator("company_name", "country")
     @classmethod
     def strip_strings(cls, v: str) -> str:
@@ -54,4 +58,3 @@ class SubmissionResponse(BaseModel):
     success: bool
     id: int
     message: str
-

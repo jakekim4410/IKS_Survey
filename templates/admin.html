@@ -202,6 +202,14 @@
           <div style="font-size: 12px; color: #64748b;">글로벌 VC 포럼</div>
           <div style="font-size: 20px; font-weight: 700; color: #0f2c59;" id="avgVc">-</div>
         </div>
+        <div style="padding: 10px; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px;">
+          <div style="font-size: 12px; font-weight: 600; color: #1e40af;">글로벌 현안 파악 (6-1)</div>
+          <div style="font-size: 20px; font-weight: 800; color: #1e40af;" id="avgEff1">-</div>
+        </div>
+        <div style="padding: 10px; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px;">
+          <div style="font-size: 12px; font-weight: 600; color: #1e40af;">향후 사업 기여도 (6-2)</div>
+          <div style="font-size: 20px; font-weight: 800; color: #1e40af;" id="avgEff2">-</div>
+        </div>
       </div>
     </div>
 
@@ -261,6 +269,8 @@
         document.getElementById('avgSemi').textContent = avgs.semi ? avgs.semi + ' / 5.0' : '-';
         document.getElementById('avgMax').textContent = avgs.max ? avgs.max + ' / 5.0' : '-';
         document.getElementById('avgVc').textContent = avgs.vc ? avgs.vc + ' / 5.0' : '-';
+        document.getElementById('avgEff1').textContent = avgs.eff_q1 ? avgs.eff_q1 + ' / 5.0' : '-';
+        document.getElementById('avgEff2').textContent = avgs.eff_q2 ? avgs.eff_q2 + ' / 5.0' : '-';
 
         // Table
         const tbody = document.getElementById('recentTableBody');
