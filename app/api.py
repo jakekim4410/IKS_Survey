@@ -1,4 +1,5 @@
 import json
+import logging
 from datetime import datetime
 from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
 from app.config import ADMIN_SECRET
@@ -7,6 +8,8 @@ from app.models import SurveySubmission, SubmissionResponse
 from app.excel_exporter import generate_survey_excel
 from app import supabase_client
 from app.survey_data import SURVEY_METADATA
+
+logger = logging.getLogger("iks_survey.api")
 
 router = APIRouter(prefix="/api")
 
